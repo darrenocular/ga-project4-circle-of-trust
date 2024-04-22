@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  margin: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* style {
+  color: #f1580c;
+  color: #f5793b;
+  color: #f79a6b;
+  color: #fbdb6b;
+  color: #facf39;
+} */
