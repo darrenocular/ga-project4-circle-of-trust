@@ -1,6 +1,7 @@
 from flask import Flask
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 from .extensions import cors, talisman, limiter, jwt, bcrypt
 
 from .controllers.auth import auth_bp
@@ -12,6 +13,8 @@ app = Flask(__name__)
 
 # App configurations
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
 # Register extensions
 cors.init_app(app)
