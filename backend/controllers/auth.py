@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, redirect
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import connect_db
 from ..extensions import bcrypt
+from ..validators.auth_validators import registration_middleware
 import datetime
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -51,6 +52,7 @@ def register_admin():
         return jsonify({ 'status': 'error', 'msg': error }), 400
 
 @auth_bp.route('/register', methods=['PUT'])
+@registration_middleware
 def register():
     try:
         if request.method == 'PUT':
@@ -147,8 +149,3 @@ def refresh():
         return jsonify(access_token=access_token), 200
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error})
-
-# @app.route('/api/data', methods=['GET'])
-# def get_data():
-#     data = {'message': 'Hello from Flask!'}
-#     return jsonify(data)
