@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, redirect
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required, get_jwt
 from ..db import connect_db
 from ..extensions import bcrypt
@@ -51,6 +51,7 @@ def register_admin():
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error }), 400
 
+# Register users
 @auth_bp.route('/register', methods=['PUT'])
 @registration_middleware
 def register():
@@ -95,7 +96,7 @@ def register():
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error }), 400
 
-
+# Login and create access and refresh tokens
 @auth_bp.route('/login', methods=['POST'])
 def login():
     try:
@@ -134,7 +135,7 @@ def login():
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error }), 400
     
-
+# Create new refresh tokens
 @auth_bp.route("/refresh", methods=["POST"])
 @jwt_required(refresh=True)
 def refresh():
