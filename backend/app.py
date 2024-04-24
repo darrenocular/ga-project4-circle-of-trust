@@ -7,6 +7,8 @@ from .extensions import cors, talisman, limiter, jwt, bcrypt
 from .controllers.auth import auth_bp
 from .controllers.follow_relationships import follow_rs_bp
 from .controllers.circles import circles_bp
+from .controllers.threads import threads_bp
+from .controllers.comments import comments_bp
 
 load_dotenv()
 
@@ -29,6 +31,8 @@ bcrypt.init_app(app)
 app.register_blueprint(auth_bp)
 app.register_blueprint(follow_rs_bp)
 app.register_blueprint(circles_bp)
+app.register_blueprint(threads_bp)
+app.register_blueprint(comments_bp)
 
 @app.route('/')
 def hello_world():

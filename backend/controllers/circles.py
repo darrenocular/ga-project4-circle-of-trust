@@ -13,7 +13,7 @@ def get_all_circles():
         conn = connect_db()
 
         if not conn:
-            raise Exception('unable to connect to db')
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
         
         with conn.cursor() as cur:
             cur.execute("""
@@ -32,7 +32,7 @@ def get_circle_by_id():
         conn = connect_db()
 
         if not conn:
-            raise Exception('unable to connect to db')
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
         
         with conn.cursor() as cur:
             circle_id = request.json.get('circle_id')
@@ -56,7 +56,7 @@ def get_circles_by_user():
         conn = connect_db()
 
         if not conn:
-            raise Exception('unable to connect to db')
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
         
         with conn.cursor() as cur:
             host_id = request.json.get('host_id')
@@ -87,7 +87,7 @@ def add_circle():
             conn = connect_db()
 
             if not conn:
-                raise Exception('unable to connect to db')
+                return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
             
             with conn.cursor() as cur:
                 title = request.json.get('title')
@@ -117,7 +117,7 @@ def edit_circle():
         conn = connect_db()
 
         if not conn:
-                raise Exception('unable to connect to db')
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
         
         with conn.cursor() as cur:
             circle_id = request.json.get('circle_id')
@@ -162,7 +162,7 @@ def delete_circle():
         conn = connect_db()
 
         if not conn:
-                raise Exception('unable to connect to db')
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
         
         with conn.cursor() as cur:
             circle_id = request.json.get('circle_id')
@@ -196,6 +196,9 @@ def get_tags_by_circle():
         if request.method == 'POST':
             conn = connect_db()
 
+            if not conn:
+                return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+
             with conn.cursor() as cur:
                 circle_id = request.json.get('circle_id')
                 cur.execute("""
@@ -215,6 +218,9 @@ def get_tags_by_circle():
 def get_all_tags():
     try:
         conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
 
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM tags")
@@ -236,7 +242,7 @@ def manage_tags():
         conn = connect_db()
 
         if not conn:
-            raise Exception('unable to connect to db')
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
         
         with conn.cursor() as cur:
             circle_id = request.json.get('circle_id')
