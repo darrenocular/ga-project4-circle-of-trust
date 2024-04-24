@@ -62,3 +62,51 @@ def delete_follow_rs():
             return jsonify({ 'status': 'error', 'msg': 'unauthorized to unfollow'}), 403
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to delete follow relationship'}), 400
+
+@follow_rs_bp.route('/followers', methods=['POST'])
+@jwt_required()
+def get_followers():
+    try:
+        if request.method == 'POST':
+            user_id = request.json.get('user_id')
+            
+            conn = connect_db()
+
+            if not conn:
+                raise Exception('unable to connect to db')
+            
+            with conn.cursor() as cur:
+                cur.execute("""
+                            SELECT users.id, users.username FROM users
+                            JOIN follow_relationships ON users.id = follow_relationships.follower_id
+                            WHERE follow_relationships.user_id = %s;
+                            """, (user_id,))
+                data = cur.fetchall()
+
+            return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all followers', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'error fetching all followers' }), 400
+
+@follow_rs_bp.route('/following', methods=['POST'])
+@jwt_required()
+def get_following():
+    try:
+        if request.method == 'POST':
+            follower_id = request.json.get('follower_id')
+            
+            conn = connect_db()
+
+            if not conn:
+                raise Exception('unable to connect to db')
+            
+            with conn.cursor() as cur:
+                cur.execute("""
+                            SELECT users.id, users.username FROM users
+                            JOIN follow_relationships ON users.id = follow_relationships.user_id
+                            WHERE follow_relationships.follower_id = %s;
+                            """, (follower_id,))
+                data = cur.fetchall()
+
+            return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all accounts followed by user', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'error fetching all accounts followed by user' }), 400

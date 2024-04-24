@@ -18,7 +18,7 @@ def validate_registration(request):
     if request.method == 'PUT' and form.validate():
         return None
     else:
-        return jsonify({ 'status': 'error', 'msg': form.errors}), 400
+        return jsonify({ 'status': 'error', 'msg': form.errors}), 406
 
 def registration_middleware(f):
     @wraps(f)
