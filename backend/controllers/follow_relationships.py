@@ -1,16 +1,21 @@
 from flask import Blueprint, jsonify, request
 from ..db import connect_db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 
 follow_rs_bp = Blueprint('follow_rs', __name__, url_prefix='/user')
 
 @follow_rs_bp.route('/follow', methods=['PUT'])
+@jwt_required()
 def add_follow_rs():
     try:
-        if request.method == 'PUT':
+        # check if logged in user is the user making the follow request
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+        follower_id = int(request.json.get('follower_id'))
+
+        if request.method == 'PUT' and logged_in_user_id == follower_id:
             conn = connect_db()
             user_id = request.json.get('user_id')
-            follower_id = request.json.get('follower_id')
 
             if not conn:
                 raise Exception('unable to connect to db')
@@ -23,13 +28,21 @@ def add_follow_rs():
                 conn.commit()
 
             return jsonify({ 'status': 'ok', 'msg': 'user follow relationship created'}), 200
+        else:
+            return jsonify({ 'status': 'error', 'msg': 'unauthorized to follow'}), 403
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to add follow relationship'}), 400
 
 @follow_rs_bp.route('/follow', methods=['DELETE'])
+@jwt_required()
 def delete_follow_rs():
     try:
-        if request.method == 'DELETE':
+        # check if logged in user is the user making the request to delete follow relationship
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+        follower_id = int(request.json.get('follower_id'))
+
+        if request.method == 'DELETE' and logged_in_user_id == follower_id:
             conn = connect_db()
             user_id = request.json.get('user_id')
             follower_id = request.json.get('follower_id')
@@ -45,5 +58,7 @@ def delete_follow_rs():
                 conn.commit()
 
             return jsonify({ 'status': 'ok', 'msg': 'user follow relationship deleted'}), 200
+        else:
+            return jsonify({ 'status': 'error', 'msg': 'unauthorized to unfollow'}), 403
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to delete follow relationship'}), 400
