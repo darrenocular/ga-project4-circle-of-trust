@@ -34,10 +34,6 @@ app.register_blueprint(circles_bp)
 app.register_blueprint(threads_bp)
 app.register_blueprint(comments_bp)
 
-@app.route('/')
-def hello_world():
-    return "<p>Hello chicken!</p>"
-
 PORT = os.getenv('PORT') or 5000
 
 if __name__ == '__main__':
