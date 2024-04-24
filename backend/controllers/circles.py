@@ -192,9 +192,37 @@ def delete_circle():
 def get_tags_by_circle():
     try:
         if request.method == 'POST':
-            pass
+            conn = connect_db()
+
+            with conn.cursor() as cur:
+                circle_id = request.json.get('circle_id')
+                cur.execute("""
+                            SELECT tag FROM circle_tags
+                            WHERE circle_id = %s
+                            """, (circle_id,))
+                results = cur.fetchall()
+                data = []
+                for tag in results:
+                    data.append(tag['tag'])
+            return jsonify({ 'status': 'ok', 'msg': 'succesfully fetched tags', 'data': data }), 200
     except:
-        return jsonify({ 'status': 'error', 'msg': 'manage tag error'}), 400
+        return jsonify({ 'status': 'error', 'msg': 'unable to get tags for circle'}), 400
+    
+@circles_bp.route('/tags/all')
+@jwt_required()
+def get_all_tags():
+    try:
+        conn = connect_db()
+
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM tags")
+            results = cur.fetchall()
+            data = []
+            for tag in results:
+                data.append(tag['tag'])
+        return jsonify({ 'status': 'ok', 'msg': 'succesfully fetched all tags', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to get all tags'}), 400
 
 @circles_bp.route('/tags', methods=['PUT', 'DELETE'])
 @jwt_required()
