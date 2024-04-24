@@ -5,6 +5,7 @@ from ..validators.circles_validators import add_circle_middleware, update_circle
 
 circles_bp = Blueprint('circles', __name__, url_prefix='/circles')
 
+# Main circles endpoints
 @circles_bp.route('/all')
 @jwt_required()
 def get_all_circles():
@@ -187,6 +188,7 @@ def delete_circle():
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to delete circle'}), 400
 
+# Tags endpoints
 @circles_bp.route('/tags', methods=['POST'])
 @jwt_required()
 def get_tags_by_circle():
@@ -267,3 +269,63 @@ def manage_tags():
                 return jsonify({ 'status': 'ok', 'msg': 'tag deleted'}), 200
     except:
         return jsonify({ 'status': 'error', 'msg': 'manage tag error'}), 400
+
+# Flags endpoints
+@circles_bp.route('/flags', methods=['PUT'])
+@jwt_required()
+def add_flag():
+    try:
+        if request.method == 'PUT':
+            conn = connect_db()
+
+            if not conn:
+                return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+
+            with conn.cursor() as cur:
+                circle_id = request.json.get('circle_id')
+                flag_user_id = request.json.get('flag_user_id')
+                cur.execute("""
+                            INSERT INTO flags(circle_id, flag_user_id)
+                            VALUES (%s, %s)
+                            """, (circle_id, flag_user_id))
+                conn.commit()
+            return jsonify({ 'status': 'ok', 'msg': 'flag successfully created'}), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to add flag'}), 400
+
+@circles_bp.route('/flags', methods=['GET', 'DELETE'])
+@jwt_required()
+def manage_flags():
+    try:
+        claims = get_jwt()
+        logged_in_user_role = claims['role']
+
+        # check that logged in user is admin
+        if logged_in_user_role != 'admin':
+            return jsonify({ 'status': 'error', 'msg': 'unauthorized operation'}), 403
+        
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            if request.method == 'GET':
+                cur.execute("""
+                            SELECT circles.*, COUNT(circles.id) AS flag_count FROM circles
+	                        JOIN flags ON flags.circle_id = circles.id
+                            GROUP BY circles.id
+                            ORDER BY flag_count DESC
+                            """)
+                data = cur.fetchall()
+                return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all flagged circles', 'data': data }), 200
+            elif request.method == 'DELETE':
+                circle_id = request.json.get('circle_id')
+                cur.execute("""
+                            DELETE FROM flags
+                            WHERE circle_id = %s
+                            """, (circle_id,))
+                conn.commit()
+                return jsonify({ 'status': 'ok', 'msg': 'successfully deleted all flags relating to a circle' }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to manage flag(s)'}), 400
