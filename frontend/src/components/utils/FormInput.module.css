@@ -1,0 +1,12 @@
+.input {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  line-height: 1.6rem;
+  font-size: 1.2rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+}
+
+.short-text {
+  width: 60%;
+}

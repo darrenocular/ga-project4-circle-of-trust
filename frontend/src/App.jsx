@@ -1,59 +1,49 @@
-// import { useState } from 'react'
-import {
-  // StreamTheme,
-  // SpeakerControls,
-  StreamCall,
-  StreamVideo,
-  StreamVideoClient,
-  OwnCapability,
-} from "@stream-io/video-react-sdk";
-import "@stream-io/video-react-sdk/dist/css/styles.css";
-import { MyUILayout } from "./components/MyUILayout";
+import React, { Suspense, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import AppContext from "./context/AppContext";
+import LoadingSpinner from "./components/utils/LoadingSpinner";
 
-// initialize credentials
-const apiKey = import.meta.env.VITE_STREAM_API_KEY;
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiR2VuZXJhbF9WZWVycyIsImlzcyI6Imh0dHBzOi8vcHJvbnRvLmdldHN0cmVhbS5pbyIsInN1YiI6InVzZXIvR2VuZXJhbF9WZWVycyIsImlhdCI6MTcxMzQxNzQ0MywiZXhwIjoxNzE0MDIyMjQ4fQ.qzCXPMavbnpKFA2nEUxn7S_7X9Mlk-TSPY-HFpftows"; // the token can be found in the "Credentials" section
-const userId = "General_Veers"; // the user_id can be found in the "Credentials" section
-const callId = "3utwyG56Cddm"; // the call_id can be found in the "Credentials" section
+const Home = React.lazy(() => import("./pages/Home"));
+const Login = React.lazy(() => import("./pages/Login"));
+const Register = React.lazy(() => import("./pages/Register"));
 
-// initialize the user object
-const user = {
-  id: userId,
-  name: "Oliver",
-  image: "https://getstream.io/random_svg/?id=oliver&name=Oliver",
-};
+const App = () => {
+  const [accessToken, setAccessToken] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [expirationDate, setExpirationDate] = useState("");
 
-const client = new StreamVideoClient({ apiKey, user, token });
-const call = client.call("audio_room", callId);
-
-await call.join({
-  create: true,
-  data: {
-    members: [{ user_id: "john_smith" }, { user_id: "jane_doe" }],
-    custom: {
-      title: "Nobody likes React",
-      description: "Talking about how much we hate React",
-    },
-  },
-});
-
-// requesting for permission to speak
-await call.requestPermissions({
-  permissions: [OwnCapability.SEND_AUDIO],
-});
-
-function App() {
   return (
-    <StreamVideo client={client}>
-      <StreamCall call={call}>
-        <MyUILayout />
-        {/* <StreamTheme>
-          <CallControls />
-        </StreamTheme> */}
-      </StreamCall>
-    </StreamVideo>
+    <>
+      <Suspense fallback={<LoadingSpinner />}>
+        <AppContext.Provider
+          value={{
+            accessToken,
+            setAccessToken,
+            loggedInUser,
+            setLoggedInUser,
+            expirationDate,
+            setExpirationDate,
+          }}
+        >
+          <Routes>
+            <Route
+              path="/"
+              element={
+                loggedInUser ? (
+                  <Navigate replace to="/home" />
+                ) : (
+                  <Navigate replace to="/login" />
+                )
+              }
+            />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/home" element={<Home />} />
+          </Routes>
+        </AppContext.Provider>
+      </Suspense>
+    </>
   );
-}
+};
 
 export default App;
