@@ -13,8 +13,6 @@ const useFetch = () => {
     let returnValue = {};
 
     if (res.ok) {
-      console.log(data);
-
       if (data.status === "error") {
         returnValue = { ok: false, msg: data.msg };
       } else {

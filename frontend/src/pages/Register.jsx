@@ -1,8 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import useFetch from "../hooks/useFetch";
-import AppContext from "../context/AppContext";
 import styles from "./styles/Login.module.css";
 import FormInput from "../components/utils/FormInput";
 import Button from "../components/utils/Button";
@@ -18,22 +16,72 @@ const Register = () => {
   const [dp, setDp] = useState("");
   const fetchData = useFetch();
   const navigate = useNavigate();
-  const appContext = useContext(AppContext);
 
   const handleInputChange = (e) => {
-    if (e.target.name === "username") {
-      setUsername(e.target.value);
-    } else if (e.target.name === "password") {
-      setPassword(e.target.value);
+    switch (e.target.name) {
+      case "username":
+        setUsername(e.target.value);
+        break;
+      case "email":
+        setEmail(e.target.value);
+        break;
+      case "password":
+        setPassword(e.target.value);
+        break;
+      case "dob":
+        setBirthDate(e.target.value);
+        break;
+      case "bio":
+        setBio(e.target.value);
+        break;
+      case "dp":
+        setDp(e.target.value);
+        break;
     }
-  };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
   };
 
   const handleClearForm = (e) => {
     e.preventDefault();
+    setUsername("");
+    setEmail("");
+    setPassword("");
+    setBirthDate("");
+    setBio("");
+    setDp("");
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      if (username && email && password && birthDate && bio) {
+        const res = await fetchData(
+          "/auth/register",
+          "PUT",
+          {
+            username,
+            email,
+            password,
+            date_of_birth: birthDate,
+            bio,
+            // dp
+          },
+          undefined
+        );
+
+        if (res.ok) {
+          handleClearForm(e);
+          navigate("/login");
+        } else {
+          throw new Error(
+            typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+          );
+        }
+      } else {
+        throw new Error("incomplete fields");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -53,7 +101,11 @@ const Register = () => {
       <form className={styles["form"]}>
         <h1>Register</h1>
         {username}
+        {email}
         {password}
+        {birthDate}
+        {bio}
+        {dp}
         <div>
           <label htmlFor="username">
             Username<span className={styles["required"]}>*</span>
@@ -116,10 +168,9 @@ const Register = () => {
             Your bio<span className={styles["required"]}>*</span>
           </label>
           <textarea
-            type="text"
             id="bio"
             name="bio"
-            className="bio"
+            className={styles["bio"]}
             rows="4"
             value={bio}
             onChange={handleInputChange}
@@ -127,23 +178,23 @@ const Register = () => {
           ></textarea>
         </div>
         <div>
-          <label htmlFor="dp">Upload a profile picture</label>
-          <FormInput
+          <label htmlFor="dp">Profile picture</label>
+          <input
             type="file"
             id="dp"
             name="dp"
-            className="file-upload"
+            className={styles["file-upload"]}
             value={dp}
             onChange={handleInputChange}
             required
-          ></FormInput>
+          ></input>
         </div>
         <div>
-          <Button type="submit" className="login-btn" onClick={handleRegister}>
-            Register
-          </Button>
-          <Button type="button" className="login-btn" onClick={handleClearForm}>
+          <Button type="button" className="clear-btn" onClick={handleClearForm}>
             Clear form
+          </Button>
+          <Button type="submit" className="submit-btn" onClick={handleRegister}>
+            Register
           </Button>
         </div>
         <p>

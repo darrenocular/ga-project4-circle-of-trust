@@ -25,9 +25,8 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-
       if (username !== "" && password !== "") {
         const res = await fetchData(
           "/auth/login",
@@ -107,7 +106,7 @@ const Login = () => {
             required
           ></FormInput>
         </div>
-        <Button type="submit" className="login-btn" onClick={handleLogin}>
+        <Button type="submit" className="submit-btn" onClick={handleLogin}>
           Log in
         </Button>
         <p>
