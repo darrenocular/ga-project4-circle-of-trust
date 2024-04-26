@@ -1,6 +1,7 @@
-.login {
+.login,
+.register {
   display: flex;
-  margin: 20% auto;
+  margin: 15% auto;
   justify-content: center;
   align-items: center;
 }

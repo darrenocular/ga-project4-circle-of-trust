@@ -10,7 +10,7 @@ const Register = React.lazy(() => import("./pages/Register"));
 const App = () => {
   const [accessToken, setAccessToken] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [expirationDate, setExpirationDate] = useState("");
+  const [expirationDate, setExpirationDate] = useState(null);
 
   return (
     <>
@@ -25,6 +25,13 @@ const App = () => {
             setExpirationDate,
           }}
         >
+          {/* To check credentials (for development only) */}
+          <div className="credentials">
+            <p>Access token: {accessToken}</p>
+            <p>Logged in user: {JSON.stringify(loggedInUser)}</p>
+            <p>Expiration date: {JSON.stringify(expirationDate)}</p>
+            <p>Refresh token: {localStorage.getItem("refreshToken")}</p>
+          </div>
           <Routes>
             <Route
               path="/"

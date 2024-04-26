@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import useFetch from "../hooks/useFetch";
+import AppContext from "../context/AppContext";
 import styles from "./styles/Login.module.css";
 import FormInput from "../components/utils/FormInput";
 import Button from "../components/utils/Button";
@@ -9,6 +12,9 @@ import WordLogo from "../assets/logo/logo-word-color.svg";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const fetchData = useFetch();
+  const navigate = useNavigate();
+  const appContext = useContext(AppContext);
 
   const handleInputChange = (e) => {
     if (e.target.name === "username") {
@@ -18,8 +24,42 @@ const Login = () => {
     }
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    try {
+      e.preventDefault();
+
+      if (username !== "" && password !== "") {
+        const res = await fetchData(
+          "/auth/login",
+          "POST",
+          { username: username, password: password },
+          undefined
+        );
+
+        if (res.ok) {
+          appContext.setAccessToken(res.data["access_token"]);
+          const decoded = jwtDecode(res.data["access_token"]);
+          const expirationDate = new Date(decoded.exp * 1000);
+          appContext.setExpirationDate(expirationDate);
+          appContext.setLoggedInUser({
+            id: decoded.id,
+            role: decoded.role,
+            username: username,
+          });
+          localStorage.setItem("refreshToken", res.data["refresh_token"]);
+        } else {
+          throw new Error(res.msg);
+        }
+
+        setUsername("");
+        setPassword("");
+        navigate("/home");
+      } else {
+        throw new Error("username and password required");
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -38,8 +78,6 @@ const Login = () => {
       </div>
       <form className={styles["form"]}>
         <h1>Log In</h1>
-        {username}
-        {password}
         <div>
           <label htmlFor="username">
             Username/Email<span className={styles["required"]}>*</span>

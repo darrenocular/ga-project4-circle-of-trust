@@ -131,7 +131,7 @@ def login():
                 }
                 access_token = create_access_token(identity=username, additional_claims=additional_claims, fresh=True)
                 refresh_token = create_refresh_token(identity=username, additional_claims=additional_claims)
-                return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+                return jsonify({ 'status': 'ok', 'msg': 'login success', 'data': { 'access_token': access_token, 'refresh_token': refresh_token } }), 200
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error }), 400
     
