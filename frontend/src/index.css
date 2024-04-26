@@ -31,9 +31,10 @@ body {
 }
 
 /* style {
-  color: #f1580c;
-  color: #f5793b;
-  color: #f79a6b;
-  color: #fbdb6b;
-  color: #facf39;
+  color: #4f0300; --maroon
+  color: #f1580c; --orange
+  color: #f5793b; --light orange
+  color: #f79a6b; --lighter orange
+  color: #fbdb6b; --light yellow
+  color: #facf39; --yellow
 } */

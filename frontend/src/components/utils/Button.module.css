@@ -32,3 +32,16 @@
 .clear-btn:hover {
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+.logout-btn {
+  width: 100%;
+  border: 2px solid #f1580c;
+  color: white;
+  background-color: #f1580c;
+}
+
+.logout-btn:hover {
+  border: 2px solid #facf39;
+  background-color: #facf39;
+  color: black;
+}
