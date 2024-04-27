@@ -39,10 +39,39 @@
   transition: all 0.4s ease;
 }
 
-.link:hover {
+.link:hover,
+.link-active {
   border: 2px solid #fbdb6b;
 }
 
-.link-active {
-  border: 2px solid #fbdb6b;
+.profile,
+.profile-active {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+  color: #fbdb6b;
+  width: 100%;
+  transition: all 0.4s ease;
+  font-size: 1.2rem;
+}
+
+.profile:hover,
+.profile-active {
+  color: white;
+}
+
+.nav-footer {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-footer span {
+  font-weight: bold;
+  margin-left: 0.8rem;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  width: 25%;
 }
