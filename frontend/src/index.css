@@ -16,6 +16,10 @@ body {
   width: 100vw;
 }
 
+p {
+  margin: 0;
+}
+
 /* Only for development */
 .credentials {
   font-size: 10px;
