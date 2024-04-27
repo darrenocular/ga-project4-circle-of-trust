@@ -1,23 +1,12 @@
 import React, { useContext } from "react";
 import styles from "./styles/NavBar.module.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import AppContext from "../context/AppContext";
 import FullLogo from "../assets/logo/logo-full-color.svg";
 import Button from "../components/utils/Button";
 
 const NavBar = () => {
   const appContext = useContext(AppContext);
-  const navigate = useNavigate();
-
-  const handleLogout = (e) => {
-    e.preventDefault();
-    appContext.setAccessToken("");
-    appContext.setLoggedInUser(null);
-    appContext.setExpirationDate(null);
-    if (localStorage.getItem("refreshToken"))
-      localStorage.removeItem("refreshToken");
-    navigate("/login");
-  };
 
   return (
     <nav className={styles["nav"]}>
@@ -75,7 +64,11 @@ const NavBar = () => {
           ></img>
           <span>@{appContext.loggedInUser.username}</span>
         </NavLink>
-        <Button type="submit" className="logout-btn" onClick={handleLogout}>
+        <Button
+          type="submit"
+          className="logout-btn"
+          onClick={appContext.logout}
+        >
           Log out
         </Button>
       </div>

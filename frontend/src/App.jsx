@@ -1,5 +1,5 @@
 import React, { Suspense, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import styles from "./App.module.css";
 import AppContext from "./context/AppContext";
 import LoadingSpinner from "./components/utils/LoadingSpinner";
@@ -17,6 +17,16 @@ const App = () => {
   const [accessToken, setAccessToken] = useState("");
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    setAccessToken("");
+    setLoggedInUser(null);
+    setExpirationDate(null);
+    if (localStorage.getItem("refreshToken"))
+      localStorage.removeItem("refreshToken");
+    navigate("/login");
+  };
 
   return (
     <>
@@ -29,6 +39,7 @@ const App = () => {
             setLoggedInUser,
             expirationDate,
             setExpirationDate,
+            logout,
           }}
         >
           {/* To check credentials (for development only) */}
