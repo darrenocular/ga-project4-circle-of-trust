@@ -4,7 +4,7 @@ import FullLogo from "../assets/logo/logo-full-color.svg";
 
 const About = () => {
   return (
-    <div className={styles["about"]}>
+    <div className={styles["about-page"]}>
       <div className={styles["about-header"]}>
         <img
           src={FullLogo}

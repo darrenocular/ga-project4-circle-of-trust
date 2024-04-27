@@ -147,6 +147,6 @@ def refresh():
             'role': claims['role']
         }
         access_token = create_access_token(identity=identity, additional_claims=additional_claims, fresh=False)
-        return jsonify(access_token=access_token), 200
+        return jsonify({ 'status': 'ok', 'msg': 'access token refreshed', 'data': { 'access_token': access_token } }), 200
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error})

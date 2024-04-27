@@ -100,12 +100,6 @@ const Register = () => {
       </div>
       <form className={styles["form"]}>
         <h1>Register</h1>
-        {username}
-        {email}
-        {password}
-        {birthDate}
-        {bio}
-        {dp}
         <div>
           <label htmlFor="username">
             Username<span className={styles["required"]}>*</span>

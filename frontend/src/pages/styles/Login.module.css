@@ -46,6 +46,11 @@
   width: 100%;
 }
 
+.form div:nth-child(6) {
+  display: flex;
+  align-items: start;
+}
+
 .register > .form div {
   margin: 0.8rem auto;
 }
