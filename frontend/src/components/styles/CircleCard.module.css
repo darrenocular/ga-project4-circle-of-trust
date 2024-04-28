@@ -1,0 +1,104 @@
+.card-container {
+  min-width: 30%;
+  border: 1px solid #4f0300;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  box-shadow: 0 2px 12px 2px rgba(0, 0, 0, 0.15);
+  background-color: #4f0300;
+  margin-right: 2rem;
+}
+
+.card-container:last-child {
+  margin-right: 0;
+}
+
+.status-bar {
+  height: 2rem;
+  width: 100%;
+  padding: 1.2rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  color: white;
+}
+
+.status-bar img {
+  height: 0.8rem;
+  margin-right: 0.4rem;
+}
+
+.primary-panel {
+  height: 10rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: end;
+  padding: 0 0.8rem;
+  color: #fbdb6b;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  padding-bottom: 0.5rem;
+}
+
+.participants-count {
+  font-size: 1rem;
+  padding-bottom: 1rem;
+}
+
+.secondary-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 1rem 0.8rem;
+  background-color: white;
+  color: black;
+  border-radius: 0 0 4px 4px;
+}
+
+.host-profile {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: black;
+  margin-bottom: 0.8rem;
+}
+
+.username {
+  font-weight: bold;
+  margin: 0 0.8rem;
+}
+
+.host-img {
+  border-radius: 50%;
+  width: 16%;
+}
+
+.host-tag {
+  padding: 0.2rem 1rem;
+  background-color: white;
+  border: 2px solid #f1580c;
+  border-radius: 4px;
+  color: #f1580c;
+}
+
+.tags-container {
+  display: flex;
+  align-items: center;
+  padding-top: 0.2rem;
+}
+
+.tags-container > div {
+  border: 1px solid #facf39;
+  border-radius: 4px;
+  background-color: #facf39;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-right: 0.8rem;
+}

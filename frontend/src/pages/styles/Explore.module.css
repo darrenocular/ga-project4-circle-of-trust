@@ -1,0 +1,46 @@
+.explore-page {
+  width: 80%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.explore-header {
+  padding: 4rem 4rem 2rem 4rem;
+  width: 100%;
+}
+
+.explore-section {
+  padding: 2rem 4rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+}
+
+.section-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-bottom: 2rem;
+}
+
+.section-body {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.section-body::-webkit-scrollbar {
+  display: none;
+}
+
+.explore-footer {
+  padding: 2rem 0;
+}
