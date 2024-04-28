@@ -24,12 +24,13 @@ const About = () => {
           topics. Each room typically has moderators who control the
           conversation and can invite participants to speak. Users can explore
           different rooms based on their interests, follow other users, and join
-          clubs focused on specific themes. Clubhouse facilitates real-time
-          interactions, allowing users to engage in meaningful conversations
-          with people from around the world. The app doesn't support text or
-          video communication, emphasizing the spontaneity and authenticity of
-          voice-based interactions. It offers a unique platform for networking,
-          learning, and socializing in an audio-centric environment.
+          Circles focused on specific themes. Circle of Trust facilitates
+          real-time interactions, allowing users to engage in meaningful
+          conversations with people from around the world. The app doesn't
+          support text or video communication, emphasizing the spontaneity and
+          authenticity of voice-based interactions. It offers a unique platform
+          for networking, learning, and socializing in an audio-centric
+          environment.
         </p>
       </div>
       <div className={styles["about-section"]}>

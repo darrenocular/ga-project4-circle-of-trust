@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import AppContext from "./context/AppContext";
 import LoadingSpinner from "./components/utils/LoadingSpinner";
 import NavBar from "./components/NavBar";
+import ProtectedRoute from "./components/utils/ProtectedRoute";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -62,36 +63,56 @@ const App = () => {
                   )
                 }
               />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route
+                path="/login"
+                element={
+                  loggedInUser ? <Navigate replace to="/home" /> : <Login />
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  loggedInUser ? <Navigate replace to="/home" /> : <Register />
+                }
+              />
               <Route
                 path="/home"
                 element={
-                  loggedInUser ? <Home /> : <Navigate replace to="/login" />
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/explore"
                 element={
-                  loggedInUser ? <Explore /> : <Navigate replace to="/login" />
+                  <ProtectedRoute>
+                    <Explore />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/host"
                 element={
-                  loggedInUser ? <Host /> : <Navigate replace to="/login" />
+                  <ProtectedRoute>
+                    <Host />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/about"
                 element={
-                  loggedInUser ? <About /> : <Navigate replace to="/login" />
+                  <ProtectedRoute>
+                    <About />
+                  </ProtectedRoute>
                 }
               />
               <Route
                 path="/profile"
                 element={
-                  loggedInUser ? <Profile /> : <Navigate replace to="/login" />
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
                 }
               />
             </Routes>

@@ -122,7 +122,8 @@ const Host = () => {
         </div>
         <div>
           <label htmlFor="participants-limit">
-            Participants limit<span className={styles["required"]}>*</span>
+            Participants limit (max. 250)
+            <span className={styles["required"]}>*</span>
           </label>
           <FormInput
             type="number"
