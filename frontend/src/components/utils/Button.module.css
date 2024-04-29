@@ -19,12 +19,13 @@
   align-items: center;
   font-weight: bold;
   font-size: 1rem;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0.2rem;
 }
 
 .back-btn:hover,
 .back-btn > i:hover {
   color: rgb(0, 0, 255);
+  border-color: rgb(0, 0, 255);
 }
 
 .back-btn > i {

@@ -368,6 +368,9 @@ def manage_tags():
 @jwt_required()
 def add_flag():
     try:
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+
         if request.method == 'PUT':
             conn = connect_db()
 
@@ -376,27 +379,41 @@ def add_flag():
 
             with conn.cursor() as cur:
                 circle_id = request.json.get('circle_id')
-                flag_user_id = request.json.get('flag_user_id')
+
                 cur.execute("""
                             INSERT INTO flags(circle_id, flag_user_id)
                             VALUES (%s, %s)
-                            """, (circle_id, flag_user_id))
+                            """, (circle_id, logged_in_user_id))
                 conn.commit()
             return jsonify({ 'status': 'ok', 'msg': 'flag successfully created'}), 200
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to add flag'}), 400
 
+@circles_bp.route('/flags', methods=['POST'])
+@jwt_required()
+def get_flags_by_circle():
+    try:
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+
+        with conn.cursor() as cur:
+            circle_id = request.json.get('circle_id')
+
+            cur.execute("""
+                        SELECT * FROM flags
+                        WHERE circle_id = %s
+                        """, (circle_id,))
+            data = cur.fetchall()
+        return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all flags', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to fetch flags'}), 400
+
 @circles_bp.route('/flags', methods=['GET', 'DELETE'])
 @jwt_required()
 def manage_flags():
     try:
-        claims = get_jwt()
-        logged_in_user_role = claims['role']
-
-        # check that logged in user is admin
-        if logged_in_user_role != 'admin':
-            return jsonify({ 'status': 'error', 'msg': 'unauthorized operation'}), 403
-        
         conn = connect_db()
 
         if not conn:

@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { FaFlag } from "react-icons/fa6";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import styles from "./styles/Circle.module.css";
@@ -14,6 +15,8 @@ const Circle = () => {
   const [tags, setTags] = useState([]);
   const [isRegistered, setIsRegistered] = useState(false);
   const [registeredUsers, setRegisteredUsers] = useState([]);
+  const [isFlagged, setIsFlagged] = useState(false);
+  const [flags, setFlags] = useState([]);
 
   const getCircle = async () => {
     try {
@@ -99,7 +102,6 @@ const Circle = () => {
 
         if (res.ok) {
           setIsRegistered(true);
-          console.log(res.msg);
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -129,14 +131,80 @@ const Circle = () => {
     }
   };
 
+  const getFlagsByCircle = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/flags",
+        "POST",
+        {
+          circle_id: circleId,
+        },
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        setFlags(res.data);
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const handleFlag = async () => {
+    try {
+      if (!isFlagged) {
+        const res = await fetchData(
+          "/circles/flags",
+          "PUT",
+          {
+            circle_id: circleId,
+          },
+          appContext.accessToken
+        );
+
+        if (res.ok) {
+          setIsFlagged(true);
+        } else {
+          throw new Error(
+            typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+          );
+        }
+      } else {
+        const res = await fetchData(
+          "/circles/flags",
+          "DELETE",
+          {
+            circle_id: circleId,
+          },
+          appContext.accessToken
+        );
+
+        if (res.ok) {
+          setIsFlagged(false);
+        } else {
+          throw new Error(
+            typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   // Get circle details when page loads
   useEffect(() => {
     getCircle();
     getTags();
     getRegisteredUsers();
+    getFlagsByCircle();
   }, []);
 
-  // Check if current user is registered
+  // Check if current user has registered for circle
   useEffect(() => {
     for (const user of registeredUsers) {
       if (user.id === appContext.loggedInUser.id) {
@@ -147,6 +215,17 @@ const Circle = () => {
     }
   }, [registeredUsers]);
 
+  // Check if current user has flagged this circle
+  useEffect(() => {
+    for (const flag of flags) {
+      if (flag.flag_user_id === appContext.loggedInUser.id) {
+        setIsFlagged(true);
+      } else {
+        setIsFlagged(false);
+      }
+    }
+  }, [flags]);
+
   return (
     <div className={styles["circle-page"]}>
       <div className={styles["circle-info"]}>
@@ -156,7 +235,7 @@ const Circle = () => {
             className="back-btn"
             onClick={() => navigate(-1)}
           >
-            <i class="arrow-left"></i> Back
+            <i className="arrow-left"></i> Back
           </Button>
           <div className={styles["status-bar"]}>
             {circle["is_live"] ? (
@@ -215,6 +294,12 @@ const Circle = () => {
         <div className={styles["circle-footer"]}></div>
       </div>
       <div className={styles["circle-actions"]}>
+        {circle["host_id"] !== appContext.loggedInUser.id && (
+          <FaFlag
+            className={isFlagged ? styles["flag-active"] : styles["flag"]}
+            onClick={handleFlag}
+          ></FaFlag>
+        )}
         {!circle["is_live"] &&
           circle["host_id"] !== appContext.loggedInUser.id && (
             <>

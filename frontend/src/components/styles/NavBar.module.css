@@ -1,5 +1,6 @@
 .nav {
   width: 20%;
+  min-width: 16rem;
   height: 90vh;
   background-color: #4f0300;
   display: flex;
@@ -53,7 +54,7 @@
   color: #fbdb6b;
   width: 100%;
   transition: all 0.4s ease;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .profile:hover,

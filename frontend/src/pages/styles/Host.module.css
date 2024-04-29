@@ -1,5 +1,7 @@
 .host-page {
   width: 80%;
+  min-width: 64rem;
+  max-width: 80rem;
   height: 90vh;
   display: flex;
   flex-direction: column;

@@ -1,6 +1,6 @@
 .card-container {
-  width: 30%;
-  min-width: 30%;
+  min-width: 18rem;
+  max-width: 18rem;
   border: 1px solid #4f0300;
   border-radius: 4px;
   display: flex;
