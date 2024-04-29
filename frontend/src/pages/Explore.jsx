@@ -10,6 +10,7 @@ const Explore = () => {
   const fetchData = useFetch();
   const [upcomingCircles, setUpcomingCircles] = useState([]);
   const [liveCircles, setLiveCircles] = useState([]);
+  const [popularCircles, setPopularCircles] = useState([]);
 
   const getAllCircles = async () => {
     try {
@@ -25,6 +26,7 @@ const Explore = () => {
           res.data.filter((circle) => circle["is_live"] === false)
         );
         setLiveCircles(res.data.filter((circle) => circle["is_live"] === true));
+        setPopularCircles(res.data.slice(0, 5));
       } else {
         throw new Error(
           typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -43,7 +45,7 @@ const Explore = () => {
   return (
     <div className={styles["explore-page"]}>
       <div className={styles["explore-header"]}>
-        <Carousel />
+        <Carousel circles={popularCircles} />
       </div>
       <div className={styles["explore-section"]}>
         <p className={styles["section-header"]}>Live</p>
