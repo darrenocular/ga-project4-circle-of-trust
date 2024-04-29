@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import styles from "./styles/Home.module.css";
 import AppContext from "../context/AppContext";
@@ -11,6 +11,7 @@ const Home = () => {
   const [followingIsActive, setFollowingIsActive] = useState(false);
   const [interestedIsActive, setInterestedIsActive] = useState(false);
   const [registeredIsActive, setRegisteredIsActive] = useState(false);
+  const [registeredCircles, setRegisteredCircles] = useState([]);
 
   const clearFilter = () => {
     setFollowingIsActive(false);
@@ -22,6 +23,32 @@ const Home = () => {
     e.preventDefault();
   };
 
+  const getRegisteredCircles = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/registered",
+        "GET",
+        undefined,
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        setRegisteredCircles(res.data);
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  // Get filtered circles when page loads
+  useEffect(() => {
+    getRegisteredCircles();
+  }, []);
+
   return (
     <div className={styles["home-page"]}>
       <div className={styles["home-header"]}>
@@ -32,10 +59,9 @@ const Home = () => {
           <Button
             type="button"
             className={followingIsActive ? "filter-btn-active" : "filter-btn"}
-            onClick={(e) => {
+            onClick={() => {
               clearFilter();
               setFollowingIsActive(!followingIsActive);
-              handleFilter(e);
             }}
             name="following"
           >
@@ -44,10 +70,9 @@ const Home = () => {
           <Button
             type="button"
             className={interestedIsActive ? "filter-btn-active" : "filter-btn"}
-            onClick={(e) => {
+            onClick={() => {
               clearFilter();
               setInterestedIsActive(!interestedIsActive);
-              handleFilter(e);
             }}
             name="interested"
           >
@@ -56,10 +81,9 @@ const Home = () => {
           <Button
             type="button"
             className={registeredIsActive ? "filter-btn-active" : "filter-btn"}
-            onClick={(e) => {
+            onClick={() => {
               clearFilter();
               setRegisteredIsActive(!registeredIsActive);
-              handleFilter(e);
             }}
             name="registered"
           >
@@ -78,7 +102,14 @@ const Home = () => {
             Filter not available in basic plan.
           </p>
         )}
-        {registeredIsActive && <div></div>}
+        {registeredIsActive &&
+          registeredCircles.map((circle) => (
+            <CircleCard
+              circle={circle}
+              isLive={circle.is_live}
+              key={circle.id}
+            ></CircleCard>
+          ))}
       </div>
       <div className={styles["home-footer"]}></div>
     </div>

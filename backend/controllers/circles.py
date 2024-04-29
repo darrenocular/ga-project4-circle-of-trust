@@ -227,7 +227,6 @@ def manage_registration():
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to manage registration'}), 400
 
-
 @circles_bp.route('/registrations', methods=['POST'])
 @jwt_required()
 def get_registered_users():
@@ -249,6 +248,31 @@ def get_registered_users():
         return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all registrations', 'data': data }), 200
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to get registrations'}), 400
+
+
+@circles_bp.route('/registered', methods=['GET'])
+@jwt_required()
+def get_registered_circles():
+    try:
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            cur.execute("""
+                        SELECT circles.*, users.username FROM circles_registrations
+                        JOIN circles ON circles_registrations.circle_id = circles.id
+                        JOIN users ON circles.host_id = users.id
+                        WHERE circles_registrations.user_id = %s
+                        """, (logged_in_user_id,))
+            data = cur.fetchall()
+        return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all circles registered for', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to get circles registered for'}), 400
 
 # Tags endpoints
 @circles_bp.route('/tags', methods=['POST'])

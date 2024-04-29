@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import styles from "./styles/Circle.module.css";
@@ -8,6 +8,7 @@ import Button from "../components/utils/Button";
 const Circle = () => {
   const appContext = useContext(AppContext);
   const fetchData = useFetch();
+  const navigate = useNavigate();
   const { circleId } = useParams();
   const [circle, setCircle] = useState({ is_live: true });
   const [tags, setTags] = useState([]);
@@ -150,6 +151,13 @@ const Circle = () => {
     <div className={styles["circle-page"]}>
       <div className={styles["circle-info"]}>
         <div className={styles["circle-header"]}>
+          <Button
+            type="button"
+            className="back-btn"
+            onClick={() => navigate(-1)}
+          >
+            <i class="arrow-left"></i> Back
+          </Button>
           <div className={styles["status-bar"]}>
             {circle["is_live"] ? (
               <>
