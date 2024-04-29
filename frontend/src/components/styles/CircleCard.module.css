@@ -11,6 +11,10 @@
   margin-right: 2rem;
 }
 
+.link {
+  text-decoration: none;
+}
+
 .card-container:last-child {
   margin-right: 0;
 }
@@ -75,8 +79,6 @@
 .host-profile {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  color: black;
   margin-bottom: 0.8rem;
 }
 

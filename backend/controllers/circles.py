@@ -39,8 +39,9 @@ def get_circle_by_id():
         with conn.cursor() as cur:
             circle_id = request.json.get('circle_id')
             cur.execute("""
-                        SELECT * FROM circles
-                        WHERE id = %s
+                        SELECT circles.*, users.username FROM circles
+	                    JOIN users ON circles.host_id = users.id
+                        WHERE circles.id = %s
                         """, (circle_id,))
             data = cur.fetchone()
 
@@ -214,16 +215,40 @@ def manage_registration():
                             INSERT INTO circles_registrations(circle_id, user_id)
                             VALUES (%s, %s)
                             """, (circle_id, logged_in_user_id))
+                conn.commit()
                 return jsonify({ 'status': 'ok', 'msg': 'successfully registered for circle' }), 200
             elif request.method == 'DELETE':
                 cur.execute("""
                             DELETE FROM circles_registrations
                             WHERE circle_id = %s AND user_id = %s
                             """, (circle_id, logged_in_user_id))
+                conn.commit()
                 return jsonify({ 'status': 'ok', 'msg': 'successfully deregistered for circle' }), 200
-            conn.commit()
     except:
-        return jsonify({ 'status': 'error', 'msg': 'unable to manage flag(s)'}), 400
+        return jsonify({ 'status': 'error', 'msg': 'unable to manage registration'}), 400
+
+
+@circles_bp.route('/registrations', methods=['POST'])
+@jwt_required()
+def get_registered_users():
+    try:     
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            circle_id = request.json.get('circle_id')
+
+            cur.execute("""
+                        SELECT * FROM circles_registrations
+                        JOIN users ON circles_registrations.user_id = users.id
+                        WHERE circles_registrations.circle_id = %s
+                        """, (circle_id,))
+            data = cur.fetchall()
+        return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all registrations', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to get registrations'}), 400
 
 # Tags endpoints
 @circles_bp.route('/tags', methods=['POST'])

@@ -39,43 +39,42 @@ const CircleCard = ({ circle, isLive }) => {
 
   return (
     <div className={styles["card-container"]}>
-      <div className={styles["status-bar"]}>
-        {isLive && (
-          <>
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Red_Circle_full.png"
-              alt="live"
-            ></img>
-            Live
-          </>
-        )}
-      </div>
-      <div className={styles["primary-panel"]}>
-        <p className={styles["title"]}>{circle.title}</p>
-        {isLive ? (
-          <p className={styles["participants-count"]}>XX listening</p>
-        ) : (
-          <p className={styles["participants-count"]}>XX signed up</p>
-        )}
-      </div>
-      <div className={styles["secondary-panel"]}>
-        <Link
-          to={`/profile/${circle.host_id}`}
-          className={styles["host-profile"]}
-        >
-          <img
-            className={styles["host-img"]}
-            src={`https://getstream.io/random_svg/?name=user`}
-          ></img>
-          <span className={styles["username"]}>{circle.username}</span>
-          <span className={styles["host-tag"]}>Host</span>
-        </Link>
-        <div className={styles["tags-container"]}>
-          {tags.map((tag, idx) => (
-            <div key={idx}>{tag}</div>
-          ))}
+      <Link to={`/circle/${circle.id}`} className={styles["link"]}>
+        <div className={styles["status-bar"]}>
+          {isLive && (
+            <>
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Red_Circle_full.png"
+                alt="live"
+              ></img>
+              Live
+            </>
+          )}
         </div>
-      </div>
+        <div className={styles["primary-panel"]}>
+          <p className={styles["title"]}>{circle.title}</p>
+          {isLive ? (
+            <p className={styles["participants-count"]}>XX listening</p>
+          ) : (
+            <p className={styles["participants-count"]}>XX signed up</p>
+          )}
+        </div>
+        <div className={styles["secondary-panel"]}>
+          <div className={styles["host-profile"]}>
+            <img
+              className={styles["host-img"]}
+              src={`https://getstream.io/random_svg/?name=user`}
+            ></img>
+            <span className={styles["username"]}>{circle.username}</span>
+            <span className={styles["host-tag"]}>Host</span>
+          </div>
+          <div className={styles["tags-container"]}>
+            {tags.map((tag, idx) => (
+              <div key={idx}>{tag}</div>
+            ))}
+          </div>
+        </div>
+      </Link>
     </div>
   );
 };

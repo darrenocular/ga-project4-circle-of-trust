@@ -1,0 +1,124 @@
+.circle-page {
+  width: 80%;
+  height: 90vh;
+  display: flex;
+  align-items: start;
+  overflow: auto;
+}
+
+.circle-info {
+  width: 80%;
+}
+
+.circle-actions {
+  width: 20%;
+  padding: 4rem 4rem 2rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  height: 2rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.status-bar img {
+  height: 1.2rem;
+  margin-right: 0.6rem;
+}
+
+.status-bar span {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.live {
+  color: red;
+}
+
+.upcoming {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.circle-header {
+  padding: 4rem 4rem 2rem 4rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.title {
+  padding-top: 1rem;
+  font-size: 3.2rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+.info-panel {
+  padding: 0 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+}
+
+.tags-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.tags-container > div {
+  border: 1px solid #facf39;
+  border-radius: 4px;
+  background-color: #facf39;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-right: 0.8rem;
+}
+
+.host-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  color: black;
+}
+
+.host-container > img {
+  border-radius: 50%;
+  width: 3.2rem;
+  height: auto;
+}
+
+.username {
+  font-weight: bold;
+  margin: 0 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.username:hover {
+  color: #f1580c;
+}
+
+.host-tag {
+  padding: 0.2rem 1rem;
+  background-color: transparent;
+  border: 2px solid #f1580c;
+  border-radius: 4px;
+  color: #f1580c;
+  font-weight: bold;
+}
+
+.info-panel > p {
+  font-size: 1.2rem;
+  margin: 0.2rem;
+}
+
+.circle-footer {
+  padding: 2rem 0;
+}
