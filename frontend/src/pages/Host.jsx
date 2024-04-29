@@ -87,9 +87,7 @@ const Host = () => {
           appContext.accessToken
         );
 
-        if (res.ok) {
-          console.log("tag added");
-        } else {
+        if (!res.ok) {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
           );

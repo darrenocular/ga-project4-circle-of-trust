@@ -11,6 +11,17 @@
   cursor: pointer;
 }
 
+.filter-btn,
+.filter-btn-active {
+  min-width: 15%;
+  margin-top: 2rem;
+  border: 2px solid #f1580c;
+  color: #f1580c;
+  font-size: 1rem;
+  border-radius: 24px;
+  margin-right: 1rem;
+}
+
 .submit-btn {
   min-width: 25%;
   margin-top: 2rem;
@@ -18,7 +29,13 @@
   color: #f1580c;
 }
 
-.submit-btn:hover {
+.submit-btn:hover,
+.filter-btn:hover {
+  color: white;
+  background-color: #f1580c;
+}
+
+.filter-btn-active {
   color: white;
   background-color: #f1580c;
 }
