@@ -1,4 +1,5 @@
 .card-container {
+  width: 30%;
   min-width: 30%;
   border: 1px solid #4f0300;
   border-radius: 4px;
@@ -43,7 +44,15 @@
 .title {
   font-size: 1.6rem;
   font-weight: bold;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  text-wrap: wrap;
+  text-overflow: ellipsis;
+  text-align: left;
 }
 
 .participants-count {
@@ -52,9 +61,11 @@
 }
 
 .secondary-panel {
+  height: 7.2rem;
   display: flex;
   flex-direction: column;
   align-items: start;
+  justify-content: space-between;
   padding: 1rem 0.8rem;
   background-color: white;
   color: black;

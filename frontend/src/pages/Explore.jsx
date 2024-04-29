@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import styles from "./styles/Explore.module.css";
 import AppContext from "../context/AppContext";
@@ -8,6 +8,37 @@ import CircleCard from "../components/CircleCard";
 const Explore = () => {
   const appContext = useContext(AppContext);
   const fetchData = useFetch();
+  const [upcomingCircles, setUpcomingCircles] = useState([]);
+  const [liveCircles, setLiveCircles] = useState([]);
+
+  const getAllCircles = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/all",
+        "GET",
+        undefined,
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        setUpcomingCircles(
+          res.data.filter((circle) => circle["is_live"] === false)
+        );
+        setLiveCircles(res.data.filter((circle) => circle["is_live"] === true));
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  // Get all circles when page loads
+  useEffect(() => {
+    getAllCircles();
+  }, []);
 
   return (
     <div className={styles["explore-page"]}>
@@ -17,23 +48,17 @@ const Explore = () => {
       <div className={styles["explore-section"]}>
         <p className={styles["section-header"]}>Live</p>
         <div className={styles["section-body"]}>
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
+          {liveCircles.map((circle, idx) => (
+            <CircleCard circle={circle} isLive={true} key={idx} />
+          ))}
         </div>
       </div>
       <div className={styles["explore-section"]}>
         <p className={styles["section-header"]}>Upcoming</p>
         <div className={styles["section-body"]}>
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
-          <CircleCard />
+          {upcomingCircles.map((circle, idx) => (
+            <CircleCard circle={circle} isLive={false} key={idx} />
+          ))}
         </div>
       </div>
       <div className={styles["explore-footer"]}></div>

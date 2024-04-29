@@ -17,7 +17,9 @@ def get_all_circles():
         
         with conn.cursor() as cur:
             cur.execute("""
-                        SELECT * FROM circles
+                        SELECT circles.*, users.username FROM circles
+	                    JOIN users ON circles.host_id = users.id
+	                    ORDER BY start_date
                         """)
             data = cur.fetchall()
         
