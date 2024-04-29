@@ -19,10 +19,6 @@ const Home = () => {
     setRegisteredIsActive(false);
   };
 
-  const handleFilter = (e) => {
-    e.preventDefault();
-  };
-
   const getRegisteredCircles = async () => {
     try {
       const res = await fetchData(

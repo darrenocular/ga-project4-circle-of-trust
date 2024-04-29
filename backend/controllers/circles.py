@@ -410,6 +410,29 @@ def get_flags_by_circle():
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to fetch flags'}), 400
 
+@circles_bp.route('/flag', methods=['DELETE'])
+@jwt_required()
+def delete_flag_by_user():
+    try:
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            circle_id = request.json.get('circle_id')
+            cur.execute("""
+                        DELETE FROM flags
+                        WHERE circle_id = %s AND flag_user_id = %s
+                        """, (circle_id,logged_in_user_id))
+            conn.commit()
+            return jsonify({ 'status': 'ok', 'msg': 'successfully deleted flag' }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to delete flag'}), 400
+
 @circles_bp.route('/flags', methods=['GET', 'DELETE'])
 @jwt_required()
 def manage_flags():
@@ -422,9 +445,10 @@ def manage_flags():
         with conn.cursor() as cur:
             if request.method == 'GET':
                 cur.execute("""
-                            SELECT circles.*, COUNT(circles.id) AS flag_count FROM circles
+                            SELECT circles.*, users.username, COUNT(circles.id) AS flag_count FROM circles
 	                        JOIN flags ON flags.circle_id = circles.id
-                            GROUP BY circles.id
+                            JOIN users ON circles.host_id = users.id
+                            GROUP BY circles.id, users.username
                             ORDER BY flag_count DESC
                             """)
                 data = cur.fetchall()

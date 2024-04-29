@@ -1,0 +1,45 @@
+.flags-page {
+  width: 80%;
+  min-width: 64rem;
+  max-width: 80rem;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  overflow: auto;
+}
+
+.flags-header {
+  padding: 4rem 4rem 0 4rem;
+  width: 100%;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: left;
+}
+
+.flags-header span {
+  color: #f1580c;
+}
+
+.flags-section {
+  padding: 2rem 4rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  font-size: 1rem;
+  width: 100%;
+  min-width: 32rem;
+}
+
+.flags-section > span {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: rgb(0, 0, 138);
+  padding: 0.5rem 1rem;
+  border: 1px solid rgb(0, 0, 138);
+  background-color: rgba(0, 0, 138, 0.15);
+}
+
+.flags-footer {
+  padding: 2rem 0;
+}

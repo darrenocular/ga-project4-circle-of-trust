@@ -175,7 +175,7 @@ const Circle = () => {
         }
       } else {
         const res = await fetchData(
-          "/circles/flags",
+          "/circles/flag",
           "DELETE",
           {
             circle_id: circleId,
@@ -270,7 +270,7 @@ const Circle = () => {
           >
             <img
               className={styles["host-img"]}
-              src={`https://getstream.io/random_svg/?name=user`}
+              src={`https://getstream.io/random_svg/?name=${circle.username}`}
             ></img>
             <span className={styles["username"]}>@{circle.username}</span>
             <span className={styles["host-tag"]}>Host</span>

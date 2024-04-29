@@ -14,6 +14,7 @@ const Host = React.lazy(() => import("./pages/Host"));
 const About = React.lazy(() => import("./pages/About"));
 const Profile = React.lazy(() => import("./pages/Profile"));
 const Circle = React.lazy(() => import("./pages/Circle"));
+const ManageFlags = React.lazy(() => import("./pages/ManageFlags"));
 
 const App = () => {
   const [accessToken, setAccessToken] = useState("");
@@ -121,6 +122,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Circle />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/circles/manage"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <ManageFlags />
                   </ProtectedRoute>
                 }
               />

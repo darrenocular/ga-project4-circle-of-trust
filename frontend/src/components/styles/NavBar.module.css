@@ -46,7 +46,8 @@
 }
 
 .profile,
-.profile-active {
+.profile-active,
+.admin-profile {
   display: flex;
   align-items: center;
   margin-bottom: 1.5rem;
