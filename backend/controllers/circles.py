@@ -98,9 +98,13 @@ def add_circle():
                 cur.execute("""
                             INSERT INTO circles(host_id, title, description, participants_limit, start_date)
                             VALUES (%s, %s, %s, %s, %s)
+                            RETURNING *
                             """, (host_id, title, description, participants_limit, start_date))
+                
+                inserted_row = cur.fetchone()
+
                 conn.commit()  
-            return jsonify({ 'status': 'ok', 'msg': 'circle created' }), 200
+            return jsonify({ 'status': 'ok', 'msg': 'circle created', 'data': inserted_row }), 200
         else:
             return jsonify({ 'status': 'error', 'error': 'creation of new circle unauthorized' }), 403
     except:
@@ -259,11 +263,12 @@ def manage_tags():
                 return jsonify({ 'status': 'error', 'msg': 'manage tag unauthorized'}), 403
 
             if request.method == 'PUT':
-                for tag in request.json.get('tags'):
-                    cur.execute("""
-                                INSERT INTO circle_tags(circle_id, tag)
-                                VALUES (%s, %s)
-                                """, (circle_id, tag))
+                # refactor to loop through an array for future enhancement
+                tag = request.json.get('tag')
+                cur.execute("""
+                            INSERT INTO circle_tags(circle_id, tag)
+                            VALUES (%s, %s)
+                            """, (circle_id, tag))
                 conn.commit()
                 return jsonify({ 'status': 'ok', 'msg': 'tag(s) added' }), 200
             elif request.method == 'DELETE':

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import useFetch from "../hooks/useFetch";
 import styles from "./styles/Host.module.css";
 import FormInput from "../components/utils/FormInput";
@@ -10,6 +10,8 @@ const Host = () => {
   const [startDate, setStartDate] = useState("");
   const [description, setDescription] = useState("");
   const [participantsLimit, setParticipantsLimit] = useState("100");
+  const [tags, setTags] = useState(""); // for future development, use array
+  const [allTags, setAllTags] = useState([]);
   const appContext = useContext(AppContext);
   const fetchData = useFetch();
 
@@ -27,6 +29,8 @@ const Host = () => {
       case "participants-limit":
         setParticipantsLimit(e.target.value);
         break;
+      case "tags":
+        setTags(e.target.value);
     }
   };
 
@@ -36,10 +40,10 @@ const Host = () => {
     setStartDate("");
     setDescription("");
     setParticipantsLimit("100");
+    setTags("");
   };
 
-  const handleAddCircle = async (e) => {
-    e.preventDefault();
+  const handleAddCircle = async () => {
     try {
       if (title && startDate && description && participantsLimit) {
         const res = await fetchData(
@@ -56,7 +60,7 @@ const Host = () => {
         );
 
         if (res.ok) {
-          handleClearForm(e);
+          return res.data.id;
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -69,6 +73,65 @@ const Host = () => {
       console.error(error.message);
     }
   };
+
+  const handleAddTags = async (circle_id) => {
+    try {
+      if (tags) {
+        const res = await fetchData(
+          "/circles/tags",
+          "PUT",
+          {
+            circle_id: circle_id,
+            tag: tags,
+          },
+          appContext.accessToken
+        );
+
+        if (res.ok) {
+          console.log("tag added");
+        } else {
+          throw new Error(
+            typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+          );
+        }
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const getAllTags = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/tags/all",
+        "GET",
+        undefined,
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        setAllTags(res.data);
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+    const circleId = await handleAddCircle();
+    await handleAddTags(circleId);
+    handleClearForm(e);
+  };
+
+  // Get all tags when page loads
+  useEffect(() => {
+    getAllTags();
+  }, []);
 
   return (
     <div className={styles["host-page"]}>
@@ -138,13 +201,35 @@ const Host = () => {
           ></FormInput>
         </div>
         <div>
+          <label htmlFor="tags">Tag(s)</label>
+          <select
+            id="tags"
+            name="tags"
+            className={styles["tags-field"]}
+            onChange={handleInputChange}
+            value={tags}
+          >
+            <option value="" disabled>
+              Select a category
+            </option>
+            {allTags &&
+              allTags.map((tag, idx) => {
+                return (
+                  <option value={tag} key={idx}>
+                    {tag}
+                  </option>
+                );
+              })}
+          </select>
+        </div>
+        <div>
           <Button type="button" className="clear-btn" onClick={handleClearForm}>
             Clear form
           </Button>
           <Button
             type="submit"
             className="submit-btn"
-            onClick={handleAddCircle}
+            onClick={handleSubmitForm}
           >
             Add Scheduled Circle
           </Button>
