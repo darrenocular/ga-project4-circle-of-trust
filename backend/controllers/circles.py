@@ -192,6 +192,37 @@ def delete_circle():
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to delete circle'}), 400
 
+@circles_bp.route('/register', methods=['PUT', 'DELETE'])
+@jwt_required()
+def manage_registration():
+    try:
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+        
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            circle_id = request.json.get('circle_id')
+
+            if request.method == 'PUT':
+                cur.execute("""
+                            INSERT INTO circles_registrations(circle_id, user_id)
+                            VALUES (%s, %s)
+                            """, (circle_id, logged_in_user_id))
+                return jsonify({ 'status': 'ok', 'msg': 'successfully registered for circle' }), 200
+            elif request.method == 'DELETE':
+                cur.execute("""
+                            DELETE FROM circles_registrations
+                            WHERE circle_id = %s AND user_id = %s
+                            """, (circle_id, logged_in_user_id))
+                return jsonify({ 'status': 'ok', 'msg': 'successfully deregistered for circle' }), 200
+            conn.commit()
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'unable to manage flag(s)'}), 400
+
 # Tags endpoints
 @circles_bp.route('/tags', methods=['POST'])
 @jwt_required()
