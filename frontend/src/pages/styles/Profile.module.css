@@ -1,0 +1,112 @@
+.profile-page {
+  width: 80%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.profile-header {
+  padding: 4rem 4rem 2rem 4rem;
+  width: 100%;
+  font-size: 3rem;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+}
+
+.profile-header span {
+  color: #f1580c;
+}
+
+.profile-container {
+  display: flex;
+  min-width: 48rem;
+  max-width: 48rem;
+  justify-content: center;
+}
+
+.host-img {
+  width: 14rem;
+  border-radius: 50%;
+  margin-right: 4rem;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  padding-top: 1rem;
+  align-items: start;
+  row-gap: 1rem;
+}
+
+.username {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.username span {
+  color: #f5793b;
+}
+
+.statistics {
+  display: flex;
+  align-items: center;
+}
+
+.statistics > div {
+  padding: 8px 12px;
+  background-color: #fbdb6b;
+  border: 1px solid black;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.bio {
+  font-size: 1.2rem;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  text-wrap: wrap;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.profile-section {
+  padding: 2rem 4rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+}
+
+.section-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-bottom: 2rem;
+}
+
+.section-body {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  white-space: nowrap;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.section-body::-webkit-scrollbar {
+  display: none;
+}
+
+.profile-footer {
+  padding: 2rem 0;
+}

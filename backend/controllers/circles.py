@@ -64,8 +64,9 @@ def get_circles_by_user():
         with conn.cursor() as cur:
             host_id = request.json.get('host_id')
             cur.execute("""
-                        SELECT * FROM circles
-                        WHERE host_id = %s
+                        SELECT circles.*, users.username FROM circles
+	                    JOIN users ON circles.host_id = users.id
+                        WHERE circles.host_id = %s
                         """, (host_id,))
             data = cur.fetchall()
 

@@ -150,3 +150,27 @@ def refresh():
         return jsonify({ 'status': 'ok', 'msg': 'access token refreshed', 'data': { 'access_token': access_token } }), 200
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error})
+    
+@auth_bp.route('/user', methods=["POST"])
+@jwt_required()
+def get_user_details():
+    try:
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            user_id = request.json.get('user_id')
+            cur.execute("""
+                        SELECT username, email, date_of_birth, bio FROM users
+                        WHERE id = %s
+                        """, (user_id,))
+            data = cur.fetchone()
+
+            if not data:
+                return jsonify({ 'status': 'error', 'msg': 'user does not exist'})
+        
+        return jsonify({ 'status': 'ok', 'msg': 'successfully fetched user details', 'data': data }), 200
+    except Exception as error:
+        return jsonify({ 'status': 'error', 'msg': error})
