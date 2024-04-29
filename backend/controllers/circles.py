@@ -52,6 +52,30 @@ def get_circle_by_id():
     except:
         return jsonify({ 'status': 'error', 'msg': 'error getting circle details'}), 400
 
+@circles_bp.route('/following', methods=['GET'])
+@jwt_required()
+def get_following_circles():
+    try:
+        claims = get_jwt()
+        logged_in_user_id = claims['id']
+
+        conn = connect_db()
+
+        if not conn:
+            return jsonify({ 'status': 'error', 'msg': 'cannot access db'}), 404
+        
+        with conn.cursor() as cur:
+            cur.execute("""
+                        SELECT circles.*, users.username FROM circles
+	                    JOIN users ON circles.host_id = users.id
+                        JOIN follow_relationships ON follow_relationships.user_id = users.id
+                        WHERE follow_relationships.follower_id = %s
+                        """, (logged_in_user_id,))
+            data = cur.fetchall()
+        return jsonify({ 'status': 'ok', 'msg': 'successfully fetched following circles', 'data': data }), 200
+    except:
+        return jsonify({ 'status': 'error', 'msg': 'error getting following circles'}), 400
+
 @circles_bp.route('/user', methods=['POST'])
 @jwt_required()
 def get_circles_by_user():

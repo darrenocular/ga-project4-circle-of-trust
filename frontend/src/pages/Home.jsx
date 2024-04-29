@@ -8,7 +8,8 @@ import Button from "../components/utils/Button";
 const Home = () => {
   const appContext = useContext(AppContext);
   const fetchData = useFetch();
-  const [followingIsActive, setFollowingIsActive] = useState(false);
+  const [followingIsActive, setFollowingIsActive] = useState(true);
+  const [followingCircles, setFollowingCircles] = useState([]);
   const [interestedIsActive, setInterestedIsActive] = useState(false);
   const [registeredIsActive, setRegisteredIsActive] = useState(false);
   const [registeredCircles, setRegisteredCircles] = useState([]);
@@ -40,9 +41,33 @@ const Home = () => {
     }
   };
 
+  const getFollowingCircles = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/following",
+        "GET",
+        undefined,
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        setFollowingCircles(
+          res.data.filter((circle) => new Date(circle.start_date) > Date.now())
+        );
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   // Get filtered circles when page loads
   useEffect(() => {
     getRegisteredCircles();
+    getFollowingCircles();
   }, []);
 
   return (
@@ -88,11 +113,14 @@ const Home = () => {
         </div>
       </div>
       <div className={styles["home-section"]}>
-        {followingIsActive && (
-          <p className={styles["notification-bar"]}>
-            Filter not available in basic plan.
-          </p>
-        )}
+        {followingIsActive &&
+          followingCircles.map((circle) => (
+            <CircleCard
+              circle={circle}
+              isLive={circle.is_live}
+              key={circle.id}
+            ></CircleCard>
+          ))}
         {interestedIsActive && (
           <p className={styles["notification-bar"]}>
             Filter not available in basic plan.
