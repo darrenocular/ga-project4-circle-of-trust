@@ -148,3 +148,22 @@
 .circle-footer {
   padding: 2rem 0;
 }
+
+.manage-link {
+  padding: 8px 1rem;
+  border-radius: 4px;
+  background-color: white;
+  text-decoration: none;
+  width: 80%;
+  font-weight: bold;
+  border: 2px solid #4f0300;
+  color: #4f0300;
+  margin-top: 1rem;
+}
+
+.manage-link:hover {
+  transition: all 0.4s ease;
+  cursor: pointer;
+  background-color: #4f0300;
+  color: white;
+}

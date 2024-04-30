@@ -1,4 +1,4 @@
-.host-page {
+.manage-page {
   width: 80%;
   min-width: 64rem;
   max-width: 80rem;
@@ -9,17 +9,24 @@
   overflow: auto;
 }
 
-.host-header {
-  padding-top: 4rem;
+.manage-page > div:first-child {
+  padding: 4rem 6rem 0 6rem;
+  width: 80%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.manage-header {
   font-size: 3rem;
   font-weight: bold;
 }
 
-.host-header span {
+.manage-header span {
   color: #f1580c;
 }
 
-.host-form {
+.manage-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,7 +34,7 @@
   width: 80%;
 }
 
-.host-form div {
+.manage-form div {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -35,11 +42,11 @@
   width: 100%;
 }
 
-.host-form div:nth-child(3) {
+.manage-form div:nth-child(3) {
   align-items: start;
 }
 
-.host-form label {
+.manage-form label {
   font-size: 1.2rem;
 }
 
@@ -54,7 +61,13 @@
   width: 60%;
 }
 
-.host-footer {
+.btn-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.manage-footer {
   padding: 1rem 0;
 }
 

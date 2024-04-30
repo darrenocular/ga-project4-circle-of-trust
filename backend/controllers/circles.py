@@ -179,7 +179,7 @@ def edit_circle():
                         WHERE id = %s
                         """, (title, description, participants_limit, start_date, circle_id))
             conn.commit()
-        return jsonify({ 'status': 'error', 'msg': 'succesfully edited circle'}), 200
+        return jsonify({ 'status': 'ok', 'msg': 'successfully edited circle'}), 200
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to edit circle'}), 400
 

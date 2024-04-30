@@ -318,12 +318,21 @@ const Circle = () => {
             </>
           )}
         {circle["host_id"] === appContext.loggedInUser.id && (
-          <Button
-            type="button"
-            className={circle["is_live"] ? "live-btn-active" : "live-btn"}
-          >
-            {circle["is_live"] ? "Live now" : "Go live"}
-          </Button>
+          <>
+            <Button
+              type="button"
+              className={circle["is_live"] ? "live-btn-active" : "live-btn"}
+            >
+              {circle["is_live"] ? "Live now" : "Go live"}
+            </Button>
+            <Link
+              to={`/circle/${circleId}/manage`}
+              state={{ circle, existingTags: tags }}
+              className={styles["manage-link"]}
+            >
+              Manage
+            </Link>
+          </>
         )}
       </div>
     </div>

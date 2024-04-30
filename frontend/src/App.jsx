@@ -15,6 +15,7 @@ const About = React.lazy(() => import("./pages/About"));
 const Profile = React.lazy(() => import("./pages/Profile"));
 const Circle = React.lazy(() => import("./pages/Circle"));
 const ManageFlags = React.lazy(() => import("./pages/ManageFlags"));
+const ManageCircle = React.lazy(() => import("./pages/ManageCircle"));
 
 const App = () => {
   const [accessToken, setAccessToken] = useState("");
@@ -122,6 +123,14 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <Circle />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/circle/:circleId/manage"
+                element={
+                  <ProtectedRoute>
+                    <ManageCircle />
                   </ProtectedRoute>
                 }
               />
