@@ -9,11 +9,9 @@ from .controllers.follow_relationships import follow_rs_bp
 from .controllers.circles import circles_bp
 from .controllers.threads import threads_bp
 from .controllers.comments import comments_bp
-# from .controllers.stream import stream_bp
 
 load_dotenv()
 
-# app = Flask(__name__, static_folder='my-app/build', static_url_path='')
 app = Flask(__name__)
 
 # App configurations
