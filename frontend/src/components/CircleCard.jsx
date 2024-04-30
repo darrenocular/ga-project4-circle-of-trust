@@ -6,6 +6,7 @@ import AppContext from "../context/AppContext";
 
 const CircleCard = ({ circle, isLive }) => {
   const [tags, setTags] = useState([]);
+  const [registeredUsers, setRegisteredUsers] = useState([]);
   const fetchData = useFetch();
   const appContext = useContext(AppContext);
 
@@ -32,31 +33,74 @@ const CircleCard = ({ circle, isLive }) => {
     }
   };
 
+  const getRegisteredUsers = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/registrations",
+        "POST",
+        {
+          circle_id: circle.id,
+        },
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        setRegisteredUsers(res.data);
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   // Get circle's tags when card loads
   useEffect(() => {
     getTags();
+    getRegisteredUsers();
   }, []);
 
   return (
     <div className={styles["card-container"]}>
       <Link to={`/circle/${circle.id}`} className={styles["link"]}>
         <div className={styles["status-bar"]}>
-          {isLive && (
+          {isLive ? (
             <>
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Red_Circle_full.png"
                 alt="live"
               ></img>
-              Live
+              <span>Live</span>
             </>
+          ) : new Date(circle.start_date) < Date.now() ? (
+            <p className={styles["status-ended"]}>Ended</p>
+          ) : (
+            <p className={styles["status-upcoming"]}>Upcoming</p>
           )}
         </div>
         <div className={styles["primary-panel"]}>
           <p className={styles["title"]}>{circle.title}</p>
           {isLive ? (
+            <p className={styles["start-date"]}>
+              Started on {circle.start_date}
+            </p>
+          ) : new Date(circle.start_date) >= Date.now() ? (
+            <p className={styles["start-date"]}>
+              Starting on {circle.start_date}
+            </p>
+          ) : (
+            <p className={styles["start-date"]}>Circle ended</p>
+          )}
+          {isLive ? (
             <p className={styles["participants-count"]}>XX listening</p>
           ) : (
-            <p className={styles["participants-count"]}>XX signed up</p>
+            new Date(circle.start_date) >= Date.now() && (
+              <p className={styles["participants-count"]}>
+                {registeredUsers.length} signed up
+              </p>
+            )
           )}
         </div>
         <div className={styles["secondary-panel"]}>

@@ -65,6 +65,10 @@
 }
 
 .upcoming {
+  color: #f1580c;
+}
+
+.ended {
   color: rgba(0, 0, 0, 0.8);
 }
 

@@ -23,7 +23,11 @@ const Explore = () => {
 
       if (res.ok) {
         setUpcomingCircles(
-          res.data.filter((circle) => circle["is_live"] === false)
+          res.data.filter(
+            (circle) =>
+              circle["is_live"] === false &&
+              new Date(circle["start_date"]) >= Date.now()
+          )
         );
         setLiveCircles(res.data.filter((circle) => circle["is_live"] === true));
         setPopularCircles(res.data.slice(0, 5));

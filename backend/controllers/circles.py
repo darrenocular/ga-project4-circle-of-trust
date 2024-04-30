@@ -91,6 +91,7 @@ def get_circles_by_user():
                         SELECT circles.*, users.username FROM circles
 	                    JOIN users ON circles.host_id = users.id
                         WHERE circles.host_id = %s
+                        ORDER BY circles.start_date
                         """, (host_id,))
             data = cur.fetchall()
 
@@ -169,9 +170,6 @@ def edit_circle():
             description = request.json.get('description') or circle['description']
             participants_limit = request.json.get('participants_limit') or circle['participants_limit']
             start_date = request.json.get('start_date') or circle['start_date']
-
-            print(title)
-            print(start_date)
 
             cur.execute("""
                         UPDATE circles
@@ -265,7 +263,7 @@ def get_registered_users():
             circle_id = request.json.get('circle_id')
 
             cur.execute("""
-                        SELECT * FROM circles_registrations
+                        SELECT users.id, users.username FROM circles_registrations
                         JOIN users ON circles_registrations.user_id = users.id
                         WHERE circles_registrations.circle_id = %s
                         """, (circle_id,))
@@ -273,7 +271,6 @@ def get_registered_users():
         return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all registrations', 'data': data }), 200
     except:
         return jsonify({ 'status': 'error', 'msg': 'unable to get registrations'}), 400
-
 
 @circles_bp.route('/registered', methods=['GET'])
 @jwt_required()
@@ -369,9 +366,10 @@ def manage_tags():
             elif logged_in_user_id != circle['host_id']:
                 return jsonify({ 'status': 'error', 'msg': 'manage tag unauthorized'}), 403
 
+            tag = request.json.get('tag')
+
             if request.method == 'PUT':
                 # refactor to loop through an array for future enhancement
-                tag = request.json.get('tag')
                 cur.execute("""
                             INSERT INTO circle_tags(circle_id, tag)
                             VALUES (%s, %s)
@@ -382,7 +380,7 @@ def manage_tags():
                 cur.execute("""
                             DELETE FROM circle_tags
                             WHERE circle_id = %s AND tag = %s
-                            """, (circle_id, request.json.get('tag')))
+                            """, (circle_id, tag))
                 conn.commit()
                 return jsonify({ 'status': 'ok', 'msg': 'tag deleted'}), 200
     except:

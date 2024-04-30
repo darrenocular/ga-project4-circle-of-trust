@@ -82,9 +82,7 @@ const ManageCircle = () => {
           appContext.accessToken
         );
 
-        if (res.ok) {
-          navigate(-1);
-        } else {
+        if (!res.ok) {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
           );
@@ -100,7 +98,7 @@ const ManageCircle = () => {
   const handleUpdateTags = async () => {
     try {
       if (tags !== existingTags[0]) {
-        let res = await fetchData(
+        const res1 = await fetchData(
           "/circles/tags",
           "DELETE",
           {
@@ -110,13 +108,13 @@ const ManageCircle = () => {
           appContext.accessToken
         );
 
-        if (!res.ok) {
+        if (!res1.ok) {
           throw new Error(
-            typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+            typeof res1.msg === "object" ? JSON.stringify(res1.msg) : res1.msg
           );
         }
 
-        res = await fetchData(
+        const res2 = await fetchData(
           "/circles/tags",
           "PUT",
           {
@@ -126,9 +124,9 @@ const ManageCircle = () => {
           appContext.accessToken
         );
 
-        if (!res.ok) {
+        if (!res2.ok) {
           throw new Error(
-            typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+            typeof res2.msg === "object" ? JSON.stringify(res2.msg) : res2.msg
           );
         }
       }
@@ -178,7 +176,7 @@ const ManageCircle = () => {
     e.preventDefault();
     await handleUpdateCircle();
     await handleUpdateTags();
-    navigate(-1);
+    navigate(`/circle/${circle.id}`);
   };
 
   // Get all tags when page loads

@@ -196,6 +196,8 @@ const Circle = () => {
     }
   };
 
+  const handleJoinCircle = () => {};
+
   // Get circle details when page loads
   useEffect(() => {
     getCircle();
@@ -246,13 +248,21 @@ const Circle = () => {
                 ></img>
                 <span className={styles["live"]}>Live</span>
               </>
+            ) : new Date(circle.start_date) >= Date.now() ? (
+              <>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Simple_orange_circle.svg/40px-Simple_orange_circle.svg.png?20220311203936"
+                  alt="upcoming"
+                ></img>
+                <span className={styles["upcoming"]}>Upcoming</span>
+              </>
             ) : (
               <>
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Circle_Davys-Grey_Solid.svg/2048px-Circle_Davys-Grey_Solid.svg.png"
-                  alt="upcoming"
+                  alt="ended"
                 ></img>
-                <span className={styles["upcoming"]}>Not live yet</span>
+                <span className={styles["ended"]}>Circle ended</span>
               </>
             )}
           </div>
@@ -284,7 +294,7 @@ const Circle = () => {
             <b>Capacity:</b> {circle.participants_limit}
           </p>
           <p>
-            <b>Sign ups:</b> XX
+            <b>Sign ups:</b> {registeredUsers.length}
           </p>
           <p>
             <b>Description: </b>
@@ -300,40 +310,49 @@ const Circle = () => {
             onClick={handleFlag}
           ></FaFlag>
         )}
-        {!circle["is_live"] &&
-          circle["host_id"] !== appContext.loggedInUser.id && (
-            <>
-              <Button type="button" className="interested-btn">
-                I'm interested!
-              </Button>
-              <Button
-                type="button"
-                className={
-                  isRegistered ? "register-btn-active" : "register-btn"
-                }
-                onClick={handleRegister}
-              >
-                {isRegistered ? "I'm going!" : "Sign me up!"}
-              </Button>
-            </>
-          )}
-        {circle["host_id"] === appContext.loggedInUser.id && (
+        {circle["host_id"] !== appContext.loggedInUser.id &&
+        !circle["is_live"] ? (
           <>
+            <Button type="button" className="interested-btn">
+              I'm interested!
+            </Button>
             <Button
               type="button"
-              className={circle["is_live"] ? "live-btn-active" : "live-btn"}
+              className={isRegistered ? "register-btn-active" : "register-btn"}
+              onClick={handleRegister}
             >
-              {circle["is_live"] ? "Live now" : "Go live"}
+              {isRegistered ? "I'm going!" : "Sign me up!"}
             </Button>
-            <Link
-              to={`/circle/${circleId}/manage`}
-              state={{ circle, existingTags: tags }}
-              className={styles["manage-link"]}
-            >
-              Manage
-            </Link>
           </>
+        ) : (
+          isRegistered && (
+            <Button
+              type="button"
+              className="join-btn"
+              onClick={handleJoinCircle}
+            >
+              Join now
+            </Button>
+          )
         )}
+        {circle["host_id"] === appContext.loggedInUser.id &&
+          new Date(circle["start_date"]) >= Date.now() && (
+            <>
+              <Button
+                type="button"
+                className={circle["is_live"] ? "live-btn-active" : "live-btn"}
+              >
+                {circle["is_live"] ? "Live now" : "Go live"}
+              </Button>
+              <Link
+                to={`/circle/${circleId}/manage`}
+                state={{ circle, existingTags: tags }}
+                className={styles["manage-link"]}
+              >
+                Manage
+              </Link>
+            </>
+          )}
       </div>
     </div>
   );
