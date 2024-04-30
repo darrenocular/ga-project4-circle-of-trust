@@ -9,6 +9,7 @@ from .controllers.follow_relationships import follow_rs_bp
 from .controllers.circles import circles_bp
 from .controllers.threads import threads_bp
 from .controllers.comments import comments_bp
+# from .controllers.stream import stream_bp
 
 load_dotenv()
 
@@ -33,6 +34,7 @@ app.register_blueprint(follow_rs_bp)
 app.register_blueprint(circles_bp)
 app.register_blueprint(threads_bp)
 app.register_blueprint(comments_bp)
+# app.register_blueprint(stream_bp)
 
 PORT = os.getenv('PORT') or 5000
 

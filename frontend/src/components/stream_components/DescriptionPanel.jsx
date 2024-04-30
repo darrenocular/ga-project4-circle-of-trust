@@ -1,9 +1,10 @@
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 
-export const MyDescriptionPanel = () => {
+export const DescriptionPanel = () => {
   const { useCallCustomData, useParticipants } = useCallStateHooks();
   const custom = useCallCustomData();
   const participants = useParticipants();
+
   return (
     <div className="description-panel">
       <h2 className="title">{custom?.title ?? "This room has no title"}</h2>

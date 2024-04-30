@@ -1,6 +1,6 @@
 import { useCall, useCallStateHooks } from "@stream-io/video-react-sdk";
 
-export const MyLiveButton = () => {
+export const LiveButton = () => {
   // this utility hook returns the call object from the <StreamCall /> context
   const call = useCall();
   // will emit a new value whenever the call goes live or stops being live.

@@ -1,6 +1,6 @@
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 
-export const MyMicButton = () => {
+export const MicButton = () => {
   const { useMicrophoneState } = useCallStateHooks();
   const { microphone, isMute } = useMicrophoneState();
   return (

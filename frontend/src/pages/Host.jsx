@@ -60,6 +60,21 @@ const Host = () => {
         );
 
         if (res.ok) {
+          // Create call when new circle is created
+          const call = appContext.streamClient.call("audio_room", res.data.id);
+          await call.getOrCreate({
+            data: {
+              members: [
+                { user_id: appContext.loggedInUser.username, role: "admin" },
+              ],
+              custom: {
+                title: res.data.title,
+                description: res.data.description,
+              },
+              startsAt: res.data.start_date,
+            },
+          });
+          console.log("call created");
           return res.data.id;
         } else {
           throw new Error(
@@ -70,7 +85,7 @@ const Host = () => {
         throw new Error("incomplete fields");
       }
     } catch (error) {
-      console.error(error.message);
+      console.error(error);
     }
   };
 

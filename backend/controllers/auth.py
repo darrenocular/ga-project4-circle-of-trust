@@ -127,7 +127,8 @@ def login():
                 
                 additional_claims = {
                     'id': existing_user['id'],
-                    'role': existing_user['role']
+                    'role': existing_user['role'],
+                    'username': existing_user['username']
                 }
                 access_token = create_access_token(identity=username, additional_claims=additional_claims, fresh=True)
                 refresh_token = create_refresh_token(identity=username, additional_claims=additional_claims)

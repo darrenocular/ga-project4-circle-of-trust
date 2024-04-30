@@ -1,7 +1,7 @@
 import { useCall } from "@stream-io/video-react-sdk";
 import { useCallback, useEffect, useState } from "react";
 
-export const MyPermissionRequestsPanel = () => {
+export const PermissionRequestsPanel = () => {
   // this hook will take the call instance from the <StreamCall /> context.
   const call = useCall();
   const [permissionRequests, setPermissionRequests] = useState([]);

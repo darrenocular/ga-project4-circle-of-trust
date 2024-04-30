@@ -1,10 +1,16 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useCallback, useState, useContext, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { FaFlag } from "react-icons/fa6";
 import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import styles from "./styles/Circle.module.css";
 import Button from "../components/utils/Button";
+import {
+  StreamCall,
+  StreamVideo,
+  useStreamVideoClient,
+} from "@stream-io/video-react-sdk";
+import { CallLayout } from "../components/stream_components/CallLayout";
 
 const Circle = () => {
   const appContext = useContext(AppContext);
@@ -17,6 +23,8 @@ const Circle = () => {
   const [registeredUsers, setRegisteredUsers] = useState([]);
   const [isFlagged, setIsFlagged] = useState(false);
   const [flags, setFlags] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [call, setCall] = useState(null);
 
   const getCircle = async () => {
     try {
@@ -196,7 +204,50 @@ const Circle = () => {
     }
   };
 
-  const handleJoinCircle = () => {};
+  // getstream.io functions
+  const loadRoom = useCallback(async () => {
+    if (!(appContext.streamClient && appContext.loggedInUser && circleId))
+      return;
+
+    setIsLoading(true);
+    try {
+      const newCall = appContext.streamClient.call("audio_room", circleId);
+      await newCall.get();
+      setCall(newCall);
+    } catch (e) {
+      console.error(e.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [appContext.streamClient, circleId, appContext.loggedInUser]);
+
+  useEffect(() => {
+    loadRoom();
+  }, []);
+
+  const handleJoinCircle = async () => {
+    console.log("joining");
+    // try {
+    //   const call = appContext.streamClient.call("audio-room", circleId);
+    //   await call.get();
+    //   console.log("call is loaded");
+    //   // await call.join({ create: false });
+    //   setCall(call);
+    // } catch (error) {
+    //   console.error(error.message);
+    // }
+  };
+
+  // const handleLeaveCircle = async () => {
+  //   try {
+  //     const call = appContext.streamClient.call("audio-room", circleId);
+  //     await call.leave();
+  //     setCall(undefined);
+  //     console.log("you have left the call");
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // };
 
   // Get circle details when page loads
   useEffect(() => {
@@ -301,7 +352,15 @@ const Circle = () => {
             {circle.description}
           </p>
         </div>
-        <div className={styles["circle-footer"]}></div>
+        <div className={styles["circle-footer"]}>
+          {!isLoading && (
+            <StreamVideo client={appContext.streamClient}>
+              <StreamCall call={call}>
+                <CallLayout />
+              </StreamCall>
+            </StreamVideo>
+          )}
+        </div>
       </div>
       <div className={styles["circle-actions"]}>
         {circle["host_id"] !== appContext.loggedInUser.id && (

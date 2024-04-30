@@ -180,7 +180,6 @@ const Register = () => {
             className={styles["file-upload"]}
             value={dp}
             onChange={handleInputChange}
-            required
           ></input>
         </div>
         <div>
