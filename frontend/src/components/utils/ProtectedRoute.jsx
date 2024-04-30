@@ -26,8 +26,10 @@ const ProtectedRoute = (props) => {
           const decoded = jwtDecode(res.data["access_token"]);
           const expirationDate = new Date(decoded.exp * 1000);
           appContext.setExpirationDate(expirationDate);
-          appContext.setLoggedInUser((prevUser) => {
-            return { ...prevUser, id: decoded.id, role: decoded.role };
+          appContext.setLoggedInUser({
+            username: decoded.username,
+            id: decoded.id,
+            role: decoded.role,
           });
         } else {
           throw new Error(res.msg); // if refresh token has expired
@@ -51,6 +53,10 @@ const ProtectedRoute = (props) => {
     }
   }, [props.requiredRole, appContext.loggedInUser]);
 
+  // useEffect(() => {
+  //   refreshAccessToken();
+  // }, []);
+
   useEffect(() => {
     const refresh = async () => {
       try {
@@ -70,6 +76,8 @@ const ProtectedRoute = (props) => {
         refresh();
       }
     }, 5 * 60 * 1000);
+
+    refreshAccessToken();
 
     return () => clearInterval(interval);
   }, []);

@@ -144,9 +144,10 @@ def refresh():
         claims = get_jwt()
         additional_claims = {
             'id': claims['id'],
-            'role': claims['role']
+            'role': claims['role'],
+            'username': identity
         }
-        access_token = create_access_token(identity=identity, additional_claims=additional_claims, fresh=False)
+        access_token = create_access_token(identity=identity, additional_claims=additional_claims)
         return jsonify({ 'status': 'ok', 'msg': 'access token refreshed', 'data': { 'access_token': access_token } }), 200
     except Exception as error:
         return jsonify({ 'status': 'error', 'msg': error})
