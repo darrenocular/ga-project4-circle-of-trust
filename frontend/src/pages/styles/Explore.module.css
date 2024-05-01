@@ -40,6 +40,14 @@
   display: none;
 }
 
+.notification-bar {
+  border: 1px solid #4f0300;
+  border-radius: 4px;
+  padding: 4px 16px;
+  font-weight: bold;
+  color: #4f0300;
+}
+
 .explore-footer {
   padding: 2rem 0;
 }

@@ -98,7 +98,7 @@ const CircleCard = ({ circle, isLive }) => {
           ) : (
             new Date(circle.start_date) >= Date.now() && (
               <p className={styles["participants-count"]}>
-                {registeredUsers.length} signed up
+                {registeredUsers.length} interested
               </p>
             )
           )}

@@ -5,11 +5,7 @@ import useFetch from "../hooks/useFetch";
 import AppContext from "../context/AppContext";
 import styles from "./styles/Circle.module.css";
 import Button from "../components/utils/Button";
-import {
-  StreamCall,
-  StreamVideo,
-  useStreamVideoClient,
-} from "@stream-io/video-react-sdk";
+import { StreamCall, StreamVideo } from "@stream-io/video-react-sdk";
 import { CallLayout } from "../components/stream_components/CallLayout";
 
 const Circle = () => {
@@ -345,7 +341,7 @@ const Circle = () => {
             <b>Capacity:</b> {circle.participants_limit}
           </p>
           <p>
-            <b>Sign ups:</b> {registeredUsers.length}
+            <b>Interested:</b> {registeredUsers.length}
           </p>
           <p>
             <b>Description: </b>
@@ -353,12 +349,14 @@ const Circle = () => {
           </p>
         </div>
         <div className={styles["circle-footer"]}>
-          {!isLoading && (
+          {!isLoading && circle["is_live"] ? (
             <StreamVideo client={appContext.streamClient}>
               <StreamCall call={call}>
                 <CallLayout />
               </StreamCall>
             </StreamVideo>
+          ) : (
+            <p>Thanks for your patience. Circle is not live yet.</p>
           )}
         </div>
       </div>
@@ -372,15 +370,12 @@ const Circle = () => {
         {circle["host_id"] !== appContext.loggedInUser.id &&
         !circle["is_live"] ? (
           <>
-            <Button type="button" className="interested-btn">
-              I'm interested!
-            </Button>
             <Button
               type="button"
               className={isRegistered ? "register-btn-active" : "register-btn"}
               onClick={handleRegister}
             >
-              {isRegistered ? "I'm going!" : "Sign me up!"}
+              {isRegistered ? "I'm going!" : "I'm interested!"}
             </Button>
           </>
         ) : (

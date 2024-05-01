@@ -206,17 +206,27 @@ const Profile = () => {
       <div className={styles["profile-section"]}>
         <p className={styles["section-header"]}>Upcoming</p>
         <div className={styles["section-body"]}>
-          {userScheduledCircles.map((circle, idx) => (
-            <CircleCard circle={circle} key={idx} />
-          ))}
+          {userScheduledCircles.length > 0 ? (
+            userScheduledCircles.map((circle, idx) => (
+              <CircleCard circle={circle} key={idx} />
+            ))
+          ) : (
+            <p className={styles["notification-bar"]}>
+              No scheduled Circles at the moment.
+            </p>
+          )}
         </div>
       </div>
       <div className={styles["profile-section"]}>
         <p className={styles["section-header"]}>Hosted</p>
         <div className={styles["section-body"]}>
-          {userHostedCircles.map((circle, idx) => (
-            <CircleCard circle={circle} key={idx} />
-          ))}
+          {userHostedCircles.length > 0 ? (
+            userHostedCircles.map((circle, idx) => (
+              <CircleCard circle={circle} key={idx} />
+            ))
+          ) : (
+            <p className={styles["notification-bar"]}>No hosted Circles yet.</p>
+          )}
         </div>
       </div>
       <div className={styles["profile-footer"]}></div>

@@ -9,6 +9,8 @@
 
 .circle-info {
   width: 80%;
+  display: flex;
+  flex-direction: column;
 }
 
 .circle-actions {
@@ -147,10 +149,22 @@
 .info-panel > p {
   font-size: 1.2rem;
   margin: 0.2rem;
+  text-align: left;
 }
 
 .circle-footer {
-  padding: 2rem 0;
+  border: 2px solid #4f0300;
+  border-radius: 4px;
+  margin: 2rem 4rem;
+  padding: 1rem 2rem;
+  width: 90%;
+}
+
+.circle-footer > p {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4f0300;
+  font-style: italic;
 }
 
 .manage-link {

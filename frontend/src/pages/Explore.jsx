@@ -54,17 +54,29 @@ const Explore = () => {
       <div className={styles["explore-section"]}>
         <p className={styles["section-header"]}>Live</p>
         <div className={styles["section-body"]}>
-          {liveCircles.map((circle, idx) => (
-            <CircleCard circle={circle} isLive={true} key={idx} />
-          ))}
+          {liveCircles.length > 0 ? (
+            liveCircles.map((circle, idx) => (
+              <CircleCard circle={circle} isLive={true} key={idx} />
+            ))
+          ) : (
+            <p className={styles["notification-bar"]}>
+              Oops! No live Circles at the moment.
+            </p>
+          )}
         </div>
       </div>
       <div className={styles["explore-section"]}>
         <p className={styles["section-header"]}>Upcoming</p>
         <div className={styles["section-body"]}>
-          {upcomingCircles.map((circle, idx) => (
-            <CircleCard circle={circle} isLive={false} key={idx} />
-          ))}
+          {upcomingCircles.length > 0 ? (
+            upcomingCircles.map((circle, idx) => (
+              <CircleCard circle={circle} isLive={false} key={idx} />
+            ))
+          ) : (
+            <p className={styles["notification-bar"]}>
+              Oops! No upcoming Circles at the moment.
+            </p>
+          )}
         </div>
       </div>
       <div className={styles["explore-footer"]}></div>

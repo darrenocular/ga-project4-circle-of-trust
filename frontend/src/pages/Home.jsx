@@ -10,13 +10,11 @@ const Home = () => {
   const fetchData = useFetch();
   const [followingIsActive, setFollowingIsActive] = useState(true);
   const [followingCircles, setFollowingCircles] = useState([]);
-  const [interestedIsActive, setInterestedIsActive] = useState(false);
   const [registeredIsActive, setRegisteredIsActive] = useState(false);
   const [registeredCircles, setRegisteredCircles] = useState([]);
 
   const clearFilter = () => {
     setFollowingIsActive(false);
-    setInterestedIsActive(false);
     setRegisteredIsActive(false);
   };
 
@@ -90,17 +88,6 @@ const Home = () => {
           </Button>
           <Button
             type="button"
-            className={interestedIsActive ? "filter-btn-active" : "filter-btn"}
-            onClick={() => {
-              clearFilter();
-              setInterestedIsActive(!interestedIsActive);
-            }}
-            name="interested"
-          >
-            Interested
-          </Button>
-          <Button
-            type="button"
             className={registeredIsActive ? "filter-btn-active" : "filter-btn"}
             onClick={() => {
               clearFilter();
@@ -108,32 +95,45 @@ const Home = () => {
             }}
             name="registered"
           >
-            Registered
+            Interested
           </Button>
         </div>
       </div>
       <div className={styles["home-section"]}>
-        {followingIsActive &&
-          followingCircles.map((circle) => (
-            <CircleCard
-              circle={circle}
-              isLive={circle.is_live}
-              key={circle.id}
-            ></CircleCard>
-          ))}
-        {interestedIsActive && (
-          <p className={styles["notification-bar"]}>
-            Filter not available in basic plan.
-          </p>
+        {followingIsActive ? (
+          followingCircles.length > 0 ? (
+            followingCircles.map((circle) => (
+              <CircleCard
+                circle={circle}
+                isLive={circle.is_live}
+                key={circle.id}
+              ></CircleCard>
+            ))
+          ) : (
+            <p className={styles["notification-bar"]}>
+              Oops! No Circles by followed users at the moment.
+            </p>
+          )
+        ) : (
+          ""
         )}
-        {registeredIsActive &&
-          registeredCircles.map((circle) => (
-            <CircleCard
-              circle={circle}
-              isLive={circle.is_live}
-              key={circle.id}
-            ></CircleCard>
-          ))}
+        {registeredIsActive ? (
+          registeredCircles.length > 0 ? (
+            registeredCircles.map((circle) => (
+              <CircleCard
+                circle={circle}
+                isLive={circle.is_live}
+                key={circle.id}
+              ></CircleCard>
+            ))
+          ) : (
+            <p className={styles["notification-bar"]}>
+              You have not indicated your interest in any Circles yet.
+            </p>
+          )
+        ) : (
+          ""
+        )}
       </div>
       <div className={styles["home-footer"]}></div>
     </div>
