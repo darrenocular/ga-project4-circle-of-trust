@@ -208,7 +208,7 @@ const Profile = () => {
         <div className={styles["section-body"]}>
           {userScheduledCircles.length > 0 ? (
             userScheduledCircles.map((circle, idx) => (
-              <CircleCard circle={circle} isLive={false} key={idx} />
+              <CircleCard circle={circle} isLive={circle.is_live} key={idx} />
             ))
           ) : (
             <p className={styles["notification-bar"]}>

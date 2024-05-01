@@ -186,8 +186,6 @@ const ManageCircle = () => {
 
   return (
     <div className={styles["manage-page"]}>
-      {JSON.stringify(circle)}
-      {JSON.stringify(existingTags)}
       <div>
         <Button type="button" className="back-btn" onClick={() => navigate(-1)}>
           <i className="arrow-left"></i> Back

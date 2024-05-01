@@ -46,23 +46,6 @@ const Login = () => {
             username: decoded.username,
           });
           localStorage.setItem("refreshToken", res.data["refresh_token"]);
-
-          // Setting up a new stream client for logged in user
-          // const streamApiKey = import.meta.env.VITE_STREAM_API_KEY;
-          // const streamToken = res.data["access_token"];
-          // const streamUserId = decoded.username;
-          // const streamUser = {
-          //   id: streamUserId,
-          //   name: streamUserId,
-          //   image: `https://getstream.io/random_svg/?name=${streamUserId}`,
-          // };
-          // appContext.setStreamClient(
-          //   new StreamVideoClient({
-          //     streamApiKey,
-          //     streamUser,
-          //     streamToken,
-          //   })
-          // );
         } else {
           throw new Error(res.msg);
         }

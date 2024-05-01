@@ -36,7 +36,6 @@ const Circle = () => {
 
       if (res.ok) {
         setCircle(res.data);
-        console.log("getting new circle");
       } else {
         throw new Error(
           typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -125,7 +124,6 @@ const Circle = () => {
 
         if (res.ok) {
           setIsRegistered(false);
-          console.log(res.msg);
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -210,12 +208,13 @@ const Circle = () => {
     setIsLoading(true);
     try {
       const newCall = appContext.streamClient.call("audio_room", circleId);
-      await newCall.get();
+      await newCall.getOrCreate();
       setCall(newCall);
     } catch (e) {
       console.error(e.message);
     } finally {
       setIsLoading(false);
+      console.log("room loaded");
     }
   }, [appContext.streamClient, circleId, appContext.loggedInUser]);
 
@@ -233,7 +232,6 @@ const Circle = () => {
 
       if (res.ok) {
         getCircle();
-        console.log("updated backend go live");
       } else {
         throw new Error(
           typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -257,7 +255,7 @@ const Circle = () => {
   // Load room on page load
   useEffect(() => {
     loadRoom();
-  }, []);
+  }, [loadRoom, circleId]);
 
   // Check if current user has registered for circle
   useEffect(() => {
@@ -365,7 +363,11 @@ const Circle = () => {
           {!isLoading && circle["host_id"] === appContext.loggedInUser.id && (
             <StreamVideo client={appContext.streamClient}>
               <StreamCall call={call}>
-                <CallLayout isHost={true} setIsLive={setIsLive} />
+                <CallLayout
+                  isHost={true}
+                  setIsLive={setIsLive}
+                  loadRoom={loadRoom}
+                />
               </StreamCall>
             </StreamVideo>
           )}
@@ -374,7 +376,7 @@ const Circle = () => {
             isLive && (
               <StreamVideo client={appContext.streamClient}>
                 <StreamCall call={call}>
-                  <CallLayout isHost={false} />
+                  <CallLayout isHost={false} loadRoom={loadRoom} />
                 </StreamCall>
               </StreamVideo>
             )}

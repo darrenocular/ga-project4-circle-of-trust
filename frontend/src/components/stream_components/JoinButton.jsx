@@ -1,13 +1,8 @@
-import { useState, useEffect } from "react";
-import { useCall, useCallStateHooks } from "@stream-io/video-react-sdk";
+import { useCall } from "@stream-io/video-react-sdk";
 import styles from "./styles/JoinButton.module.css";
 
-export const JoinButton = ({ setIsLive }) => {
+export const JoinButton = ({ isInCall, setIsInCall, loadRoom }) => {
   const call = useCall();
-  const { useParticipants, useLocalParticipant } = useCallStateHooks();
-  const participants = useParticipants();
-  const localParticipant = useLocalParticipant();
-  const [isInCall, setIsInCall] = useState(false);
 
   const handleJoinCall = async () => {
     try {
@@ -21,19 +16,12 @@ export const JoinButton = ({ setIsLive }) => {
   const handleLeaveCall = async () => {
     try {
       await call?.leave();
+      await loadRoom();
       setIsInCall(false);
     } catch (error) {
       console.error(error.message);
     }
   };
-
-  useEffect(() => {
-    if (participants.includes(localParticipant)) {
-      setIsInCall(true);
-    } else {
-      setIsInCall(false);
-    }
-  }, []);
 
   return (
     <button

@@ -171,7 +171,7 @@ def edit_circle():
             description = request.json.get('description') or circle['description']
             participants_limit = request.json.get('participants_limit') or circle['participants_limit']
             start_date = request.json.get('start_date') or circle['start_date']
-            is_live = request.json.get('is_live')
+            is_live = request.json.get('is_live') or circle['is_live']
 
             cur.execute("""
                         UPDATE circles
