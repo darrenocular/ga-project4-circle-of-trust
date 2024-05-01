@@ -349,15 +349,27 @@ const Circle = () => {
           </p>
         </div>
         <div className={styles["circle-footer"]}>
-          {!isLoading && circle["is_live"] ? (
+          {!isLoading && circle["host_id"] === appContext.loggedInUser.id && (
             <StreamVideo client={appContext.streamClient}>
               <StreamCall call={call}>
                 <CallLayout />
               </StreamCall>
             </StreamVideo>
-          ) : (
-            <p>Thanks for your patience. Circle is not live yet.</p>
           )}
+          {!isLoading &&
+            circle["host_id"] !== appContext.loggedInUser.id &&
+            circle["is_live"] && (
+              <StreamVideo client={appContext.streamClient}>
+                <StreamCall call={call}>
+                  <CallLayout />
+                </StreamCall>
+              </StreamVideo>
+            )}
+          {!isLoading &&
+            circle["host_id"] !== appContext.loggedInUser.id &&
+            !circle["isLive"] && (
+              <p>Thanks for your patience. Circle is not live yet.</p>
+            )}
         </div>
       </div>
       <div className={styles["circle-actions"]}>
@@ -390,22 +402,14 @@ const Circle = () => {
           )
         )}
         {circle["host_id"] === appContext.loggedInUser.id &&
-          new Date(circle["start_date"]) >= Date.now() && (
-            <>
-              <Button
-                type="button"
-                className={circle["is_live"] ? "live-btn-active" : "live-btn"}
-              >
-                {circle["is_live"] ? "Live now" : "Go live"}
-              </Button>
-              <Link
-                to={`/circle/${circleId}/manage`}
-                state={{ circle, existingTags: tags }}
-                className={styles["manage-link"]}
-              >
-                Manage
-              </Link>
-            </>
+          !circle["is_live"] && (
+            <Link
+              to={`/circle/${circleId}/manage`}
+              state={{ circle, existingTags: tags }}
+              className={styles["manage-link"]}
+            >
+              Manage
+            </Link>
           )}
       </div>
     </div>

@@ -1,0 +1,12 @@
+.participant {
+  display: flex;
+  flex-direction: column;
+  width: 32px;
+  height: auto;
+}
+
+.name {
+  font-size: 8px;
+  font-weight: bold;
+  color: #4f0300;
+}

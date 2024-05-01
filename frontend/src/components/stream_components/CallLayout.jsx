@@ -1,15 +1,16 @@
-import { DescriptionPanel } from "./DescriptionPanel";
 import { ParticipantsPanel } from "./ParticipantsPanel";
 import { ControlsPanel } from "./ControlsPanel";
 import { PermissionRequestsPanel } from "./PermissionRequestsPanel";
+import styles from "./styles/CallLayout.module.css";
 
 export const CallLayout = () => {
   return (
-    <div>
-      <DescriptionPanel />
-      <ParticipantsPanel />
+    <div className={styles["call-layout"]}>
+      <div className={styles["row"]}>
+        <ParticipantsPanel />
+        <ControlsPanel />
+      </div>
       <PermissionRequestsPanel />
-      <ControlsPanel />
     </div>
   );
 };

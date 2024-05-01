@@ -1,5 +1,6 @@
 import { useCall } from "@stream-io/video-react-sdk";
 import { useCallback, useEffect, useState } from "react";
+import styles from "./styles/PermissionRequestsPanel.module.css";
 
 export const PermissionRequestsPanel = () => {
   // this hook will take the call instance from the <StreamCall /> context.
@@ -30,24 +31,32 @@ export const PermissionRequestsPanel = () => {
     [call]
   );
 
-  if (!permissionRequests.length) return null;
+  // if (!permissionRequests.length) return null;
 
   return (
-    <div className="permission-requests">
-      <h4>Permission Requests</h4>
-      {permissionRequests.map((request) => (
-        <div className="permission-request" key={request.user.id}>
-          <span>
-            {request.user.name} requested to {request.permissions.join(", ")}
-          </span>
-          <button onClick={() => handlePermissionRequest(request, true)}>
-            Approve
-          </button>
-          <button onClick={() => handlePermissionRequest(request, false)}>
-            Deny
-          </button>
-        </div>
-      ))}
+    <div className={styles["permissions-panel"]}>
+      <p className={styles["permissions-header"]}>Permission Requests</p>
+      {permissionRequests.length > 0 ? (
+        permissionRequests.map((request) => (
+          <div className={styles["permission-request"]} key={request.user.id}>
+            <span>
+              {request.user.name} requested to {request.permissions.join(", ")}
+            </span>
+            <div>
+              <button onClick={() => handlePermissionRequest(request, true)}>
+                Approve
+              </button>
+              <button onClick={() => handlePermissionRequest(request, false)}>
+                Deny
+              </button>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className={styles["notification-bar"]}>
+          No permission requests at the moment.
+        </p>
+      )}
     </div>
   );
 };

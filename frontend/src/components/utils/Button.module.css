@@ -127,19 +127,12 @@
   color: white;
 }
 
-.live-btn,
-.live-btn-active,
 .safe-btn {
   width: 80%;
   font-size: 1rem;
   font-weight: bold;
   border: 2px solid rgb(0, 0, 138);
   color: rgb(0, 0, 138);
-}
-
-.live-btn-active {
-  background-color: rgb(0, 0, 138);
-  color: white;
 }
 
 .delete-btn {
@@ -164,7 +157,6 @@
   color: rgb(0, 0, 138);
 }
 
-.live-btn:hover,
 .safe-btn:hover,
 .follow-btn:hover,
 .follow-btn-active {

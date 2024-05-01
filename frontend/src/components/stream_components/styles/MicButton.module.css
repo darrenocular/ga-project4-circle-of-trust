@@ -1,0 +1,28 @@
+.mute-btn,
+.mute-btn-active {
+  padding: 8px 1rem;
+  border-radius: 4px;
+  background-color: #facf39;
+  font-family: "Inter", sans-serif;
+  width: 96px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid black;
+  color: black;
+  margin-bottom: 8px;
+}
+
+.mute-btn-active,
+.mute-btn:hover {
+  background-color: white;
+}
+
+.mute-btn-active:hover {
+  background-color: #facf39;
+}
+
+.mute-btn:hover,
+.mute-btn-active:hover {
+  transition: all 0.4s ease;
+  cursor: pointer;
+}

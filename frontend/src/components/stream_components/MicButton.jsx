@@ -1,4 +1,5 @@
-import { useCallStateHooks } from "@stream-io/video-react-sdk";
+import { useCall, useCallStateHooks } from "@stream-io/video-react-sdk";
+import styles from "./styles/MicButton.module.css";
 
 export const MicButton = () => {
   const { useMicrophoneState } = useCallStateHooks();
@@ -6,7 +7,7 @@ export const MicButton = () => {
   return (
     <>
       <button
-        className="mic-button"
+        className={isMute ? styles["mute-btn-active"] : styles["mute-btn"]}
         onClick={async () => {
           if (isMute) {
             await microphone.enable();

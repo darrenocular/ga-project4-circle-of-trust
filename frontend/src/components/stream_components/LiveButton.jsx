@@ -1,4 +1,5 @@
 import { useCall, useCallStateHooks } from "@stream-io/video-react-sdk";
+import styles from "./styles/LiveButton.module.css";
 
 export const LiveButton = () => {
   // this utility hook returns the call object from the <StreamCall /> context
@@ -9,7 +10,7 @@ export const LiveButton = () => {
   const isLive = useIsCallLive();
   return (
     <button
-      className={`live-button ${isLive ? "live" : ""}`}
+      className={isLive ? styles["live-btn-active"] : styles["live-btn"]}
       onClick={async () => {
         if (isLive) {
           await call?.stopLive();
@@ -18,7 +19,7 @@ export const LiveButton = () => {
         }
       }}
     >
-      {isLive ? "Stop Live" : "Go Live"}
+      {isLive ? "Live now" : "Go live"}
     </button>
   );
 };

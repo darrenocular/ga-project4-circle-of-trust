@@ -70,6 +70,7 @@ def get_following_circles():
 	                    JOIN users ON circles.host_id = users.id
                         JOIN follow_relationships ON follow_relationships.user_id = users.id
                         WHERE follow_relationships.follower_id = %s
+                        ORDER BY circles.start_date
                         """, (logged_in_user_id,))
             data = cur.fetchall()
         return jsonify({ 'status': 'ok', 'msg': 'successfully fetched following circles', 'data': data }), 200
@@ -290,6 +291,7 @@ def get_registered_circles():
                         JOIN circles ON circles_registrations.circle_id = circles.id
                         JOIN users ON circles.host_id = users.id
                         WHERE circles_registrations.user_id = %s
+                        ORDER BY circles.start_date
                         """, (logged_in_user_id,))
             data = cur.fetchall()
         return jsonify({ 'status': 'ok', 'msg': 'successfully fetched all circles registered for', 'data': data }), 200
