@@ -1,4 +1,4 @@
-import { Avatar } from "@stream-io/video-react-sdk";
+// import { Avatar } from "@stream-io/video-react-sdk";
 import styles from "./styles/Participant.module.css";
 
 export const Participant = ({ participant }) => {
@@ -7,7 +7,7 @@ export const Participant = ({ participant }) => {
   const { isSpeaking } = participant;
   return (
     <div className={styles["participant"]}>
-      <Avatar imageSrc={participant.image} />
+      <img src={participant.image} className={styles["avatar"]} />
       <p className={styles["name"]}>{participant.name}</p>
     </div>
   );

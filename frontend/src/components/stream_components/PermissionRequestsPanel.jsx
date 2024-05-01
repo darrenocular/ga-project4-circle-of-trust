@@ -1,6 +1,7 @@
 import { useCall } from "@stream-io/video-react-sdk";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./styles/PermissionRequestsPanel.module.css";
+import Button from "../utils/Button";
 
 export const PermissionRequestsPanel = () => {
   // this hook will take the call instance from the <StreamCall /> context.
@@ -42,13 +43,19 @@ export const PermissionRequestsPanel = () => {
             <span>
               {request.user.name} requested to {request.permissions.join(", ")}
             </span>
-            <div>
-              <button onClick={() => handlePermissionRequest(request, true)}>
+            <div className={styles["btn-container"]}>
+              <Button
+                className="approve-btn"
+                onClick={() => handlePermissionRequest(request, true)}
+              >
                 Approve
-              </button>
-              <button onClick={() => handlePermissionRequest(request, false)}>
+              </Button>
+              <Button
+                className="deny-btn"
+                onClick={() => handlePermissionRequest(request, false)}
+              >
                 Deny
-              </button>
+              </Button>
             </div>
           </div>
         ))

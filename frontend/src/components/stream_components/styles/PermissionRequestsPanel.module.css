@@ -15,6 +15,18 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin: 8px 0 4px 0;
+}
+
+.permission-request span {
+  width: 60%;
+  color: #4f0300;
+}
+
+.btn-container {
+  width: 40%;
+  display: flex;
+  justify-content: end;
 }
 
 .notification-bar {

@@ -1,16 +1,20 @@
 import { ParticipantsPanel } from "./ParticipantsPanel";
-import { ControlsPanel } from "./ControlsPanel";
+import { HostControlsPanel, ParticipantsControlsPanel } from "./ControlsPanel";
 import { PermissionRequestsPanel } from "./PermissionRequestsPanel";
 import styles from "./styles/CallLayout.module.css";
 
-export const CallLayout = () => {
+export const CallLayout = ({ isHost, setIsLive }) => {
   return (
     <div className={styles["call-layout"]}>
       <div className={styles["row"]}>
         <ParticipantsPanel />
-        <ControlsPanel />
+        {isHost ? (
+          <HostControlsPanel setIsLive={setIsLive} />
+        ) : (
+          <ParticipantsControlsPanel />
+        )}
       </div>
-      <PermissionRequestsPanel />
+      {isHost && <PermissionRequestsPanel />}
     </div>
   );
 };

@@ -13,12 +13,13 @@ const Circle = () => {
   const fetchData = useFetch();
   const navigate = useNavigate();
   const { circleId } = useParams();
-  const [circle, setCircle] = useState({ is_live: true });
+  const [circle, setCircle] = useState({});
   const [tags, setTags] = useState([]);
   const [isRegistered, setIsRegistered] = useState(false);
   const [registeredUsers, setRegisteredUsers] = useState([]);
   const [isFlagged, setIsFlagged] = useState(false);
   const [flags, setFlags] = useState([]);
+  const [isLive, setIsLive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [call, setCall] = useState(null);
 
@@ -35,6 +36,7 @@ const Circle = () => {
 
       if (res.ok) {
         setCircle(res.data);
+        console.log("getting new circle");
       } else {
         throw new Error(
           typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -217,33 +219,30 @@ const Circle = () => {
     }
   }, [appContext.streamClient, circleId, appContext.loggedInUser]);
 
-  useEffect(() => {
-    loadRoom();
-  }, []);
+  const handleCircleGoLive = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/edit",
+        "PATCH",
+        {
+          circle_id: circleId,
+          is_live: isLive ? "true" : "false",
+        },
+        appContext.accessToken
+      );
 
-  const handleJoinCircle = async () => {
-    console.log("joining");
-    // try {
-    //   const call = appContext.streamClient.call("audio-room", circleId);
-    //   await call.get();
-    //   console.log("call is loaded");
-    //   // await call.join({ create: false });
-    //   setCall(call);
-    // } catch (error) {
-    //   console.error(error.message);
-    // }
+      if (res.ok) {
+        getCircle();
+        console.log("updated backend go live");
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
-
-  // const handleLeaveCircle = async () => {
-  //   try {
-  //     const call = appContext.streamClient.call("audio-room", circleId);
-  //     await call.leave();
-  //     setCall(undefined);
-  //     console.log("you have left the call");
-  //   } catch (error) {
-  //     console.error(error.message);
-  //   }
-  // };
 
   // Get circle details when page loads
   useEffect(() => {
@@ -251,6 +250,13 @@ const Circle = () => {
     getTags();
     getRegisteredUsers();
     getFlagsByCircle();
+  }, []);
+
+  useEffect(() => setIsLive(circle.is_live), [circle]);
+
+  // Load room on page load
+  useEffect(() => {
+    loadRoom();
   }, []);
 
   // Check if current user has registered for circle
@@ -275,6 +281,13 @@ const Circle = () => {
     }
   }, [flags]);
 
+  // Update is_live in circle whenever live status changes
+  useEffect(() => {
+    if (circle["host_id"] === appContext.loggedInUser.id) {
+      handleCircleGoLive();
+    }
+  }, [isLive]);
+
   return (
     <div className={styles["circle-page"]}>
       <div className={styles["circle-info"]}>
@@ -287,7 +300,7 @@ const Circle = () => {
             <i className="arrow-left"></i> Back
           </Button>
           <div className={styles["status-bar"]}>
-            {circle["is_live"] ? (
+            {isLive ? (
               <>
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Red_Circle_full.png"
@@ -332,7 +345,7 @@ const Circle = () => {
             <span className={styles["username"]}>@{circle.username}</span>
             <span className={styles["host-tag"]}>Host</span>
           </Link>
-          {!circle["is_live"] && (
+          {!isLive && (
             <p className={styles["start-date"]}>
               <b>Scheduled for:</b> {circle.start_date}
             </p>
@@ -352,24 +365,22 @@ const Circle = () => {
           {!isLoading && circle["host_id"] === appContext.loggedInUser.id && (
             <StreamVideo client={appContext.streamClient}>
               <StreamCall call={call}>
-                <CallLayout />
+                <CallLayout isHost={true} setIsLive={setIsLive} />
               </StreamCall>
             </StreamVideo>
           )}
           {!isLoading &&
             circle["host_id"] !== appContext.loggedInUser.id &&
-            circle["is_live"] && (
+            isLive && (
               <StreamVideo client={appContext.streamClient}>
                 <StreamCall call={call}>
-                  <CallLayout />
+                  <CallLayout isHost={false} />
                 </StreamCall>
               </StreamVideo>
             )}
           {!isLoading &&
             circle["host_id"] !== appContext.loggedInUser.id &&
-            !circle["isLive"] && (
-              <p>Thanks for your patience. Circle is not live yet.</p>
-            )}
+            !isLive && <p>Thanks for your patience. Circle is not live yet.</p>}
         </div>
       </div>
       <div className={styles["circle-actions"]}>
@@ -379,8 +390,7 @@ const Circle = () => {
             onClick={handleFlag}
           ></FaFlag>
         )}
-        {circle["host_id"] !== appContext.loggedInUser.id &&
-        !circle["is_live"] ? (
+        {circle["host_id"] !== appContext.loggedInUser.id && !isLive ? (
           <>
             <Button
               type="button"
@@ -401,16 +411,15 @@ const Circle = () => {
             </Button>
           )
         )}
-        {circle["host_id"] === appContext.loggedInUser.id &&
-          !circle["is_live"] && (
-            <Link
-              to={`/circle/${circleId}/manage`}
-              state={{ circle, existingTags: tags }}
-              className={styles["manage-link"]}
-            >
-              Manage
-            </Link>
-          )}
+        {circle["host_id"] === appContext.loggedInUser.id && !isLive && (
+          <Link
+            to={`/circle/${circleId}/manage`}
+            state={{ circle, existingTags: tags }}
+            className={styles["manage-link"]}
+          >
+            Manage
+          </Link>
+        )}
       </div>
     </div>
   );

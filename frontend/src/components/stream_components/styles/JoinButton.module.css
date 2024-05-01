@@ -1,0 +1,29 @@
+.join-btn,
+.join-btn-active {
+  padding: 8px 1rem;
+  border-radius: 4px;
+  background-color: white;
+  font-family: "Inter", sans-serif;
+  width: 96px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #f1580c;
+  color: #f1580c;
+}
+
+.join-btn-active,
+.join-btn:hover {
+  background-color: #f1580c;
+  color: white;
+}
+
+.join-btn-active:hover {
+  background-color: white;
+  color: #f1580c;
+}
+
+.join-btn:hover,
+.join-btn-active:hover {
+  transition: all 0.4s ease;
+  cursor: pointer;
+}

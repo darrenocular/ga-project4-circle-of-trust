@@ -119,6 +119,9 @@
 .username {
   font-weight: bold;
   margin: 0 0.8rem;
+  max-width: 104px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .host-img {

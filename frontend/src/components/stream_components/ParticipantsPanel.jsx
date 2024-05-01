@@ -10,9 +10,7 @@ export const ParticipantsPanel = () => {
   const hasAudio = (p) => p.publishedTracks.includes(SfuModels.TrackType.AUDIO);
 
   const { useParticipants } = useCallStateHooks();
-  // whenever a participant receives an update, this hook will re-render
-  // this component with the updated list of participants, ensuring that
-  // the UI is always in sync with the call state.
+
   const participants = useParticipants();
   const speakers = participants.filter((p) => hasAudio(p));
   const listeners = participants.filter((p) => !hasAudio(p));
@@ -20,7 +18,9 @@ export const ParticipantsPanel = () => {
   return (
     <div className={styles["participants-panel"]}>
       <div className={styles["participants-section"]}>
-        <p className={styles["participants-header"]}>Speakers</p>
+        <p className={styles["participants-header"]}>
+          Speakers ({speakers.length})
+        </p>
         <ParticipantsAudio participants={speakers} />
         <div className={styles["participants-body"]}>
           {speakers.length > 0 ? (
@@ -35,7 +35,9 @@ export const ParticipantsPanel = () => {
         </div>
       </div>
       <div className={styles["participants-section"]}>
-        <p className={styles["participants-header"]}>Listeners</p>
+        <p className={styles["participants-header"]}>
+          Listeners ({listeners.length})
+        </p>
         <div className={styles["participants-body"]}>
           {listeners.length > 0 ? (
             listeners.map((p) => (

@@ -1,12 +1,23 @@
 .participant {
   display: flex;
   flex-direction: column;
-  width: 32px;
+  align-items: center;
+  width: 72px;
   height: auto;
+  margin-right: 24px;
+}
+
+.avatar {
+  border-radius: 50%;
+  margin-bottom: 12px;
+  width: 80%;
 }
 
 .name {
-  font-size: 8px;
+  font-size: 12px;
   font-weight: bold;
   color: #4f0300;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -171,12 +171,13 @@ def edit_circle():
             description = request.json.get('description') or circle['description']
             participants_limit = request.json.get('participants_limit') or circle['participants_limit']
             start_date = request.json.get('start_date') or circle['start_date']
+            is_live = request.json.get('is_live')
 
             cur.execute("""
                         UPDATE circles
-                        SET title = %s, description = %s, participants_limit = %s, start_date = %s
+                        SET title = %s, description = %s, participants_limit = %s, start_date = %s, is_live = %s
                         WHERE id = %s
-                        """, (title, description, participants_limit, start_date, circle_id))
+                        """, (title, description, participants_limit, start_date, is_live, circle_id))
             conn.commit()
         return jsonify({ 'status': 'ok', 'msg': 'successfully edited circle'}), 200
     except:

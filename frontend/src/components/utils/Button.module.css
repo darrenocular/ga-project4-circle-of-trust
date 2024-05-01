@@ -181,3 +181,30 @@
   background-color: #f1580c;
   color: white;
 }
+
+.approve-btn {
+  width: 96px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid green;
+  color: green;
+}
+
+.approve-btn:hover {
+  background-color: green;
+  color: white;
+}
+
+.deny-btn {
+  width: 96px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid red;
+  color: red;
+  margin-left: 8px;
+}
+
+.deny-btn:hover {
+  background-color: red;
+  color: white;
+}
