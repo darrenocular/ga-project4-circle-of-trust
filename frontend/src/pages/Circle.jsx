@@ -20,6 +20,7 @@ const Circle = () => {
   const [isFlagged, setIsFlagged] = useState(false);
   const [flags, setFlags] = useState([]);
   const [isLive, setIsLive] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [call, setCall] = useState(null);
 
@@ -200,9 +201,12 @@ const Circle = () => {
     }
   };
 
-  // getstream.io functions
+  // Load audio room from getstream.io
   const loadRoom = useCallback(async () => {
-    if (!(appContext.streamClient && appContext.loggedInUser && circleId))
+    if (
+      isEnded ||
+      !(appContext.streamClient && appContext.loggedInUser && circleId)
+    )
       return;
 
     setIsLoading(true);
@@ -214,7 +218,6 @@ const Circle = () => {
       console.error(e.message);
     } finally {
       setIsLoading(false);
-      console.log("room loaded");
     }
   }, [appContext.streamClient, circleId, appContext.loggedInUser]);
 
@@ -242,6 +245,30 @@ const Circle = () => {
     }
   };
 
+  const handleEndCircle = async () => {
+    try {
+      const res = await fetchData(
+        "/circles/edit",
+        "PATCH",
+        {
+          circle_id: circleId,
+          is_ended: isEnded ? "true" : "false",
+        },
+        appContext.accessToken
+      );
+
+      if (res.ok) {
+        getCircle();
+      } else {
+        throw new Error(
+          typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
+        );
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   // Get circle details when page loads
   useEffect(() => {
     getCircle();
@@ -250,7 +277,11 @@ const Circle = () => {
     getFlagsByCircle();
   }, []);
 
-  useEffect(() => setIsLive(circle.is_live), [circle]);
+  // Set isLive and isEnded when circle data is fetched
+  useEffect(() => {
+    setIsLive(circle.is_live);
+    setIsEnded(circle.is_ended);
+  }, [circle]);
 
   // Load room on page load
   useEffect(() => {
@@ -279,12 +310,19 @@ const Circle = () => {
     }
   }, [flags]);
 
-  // Update is_live in circle whenever live status changes
+  // Update is_live in circle whenever isLive state changes
   useEffect(() => {
     if (circle["host_id"] === appContext.loggedInUser.id) {
       handleCircleGoLive();
     }
   }, [isLive]);
+
+  // Update is_ended in circle whenever isEnded state changes
+  useEffect(() => {
+    if (circle["host_id"] === appContext.loggedInUser.id) {
+      handleEndCircle();
+    }
+  }, [isEnded]);
 
   return (
     <div className={styles["circle-page"]}>
@@ -298,7 +336,15 @@ const Circle = () => {
             <i className="arrow-left"></i> Back
           </Button>
           <div className={styles["status-bar"]}>
-            {isLive ? (
+            {isEnded ? (
+              <>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Circle_Davys-Grey_Solid.svg/2048px-Circle_Davys-Grey_Solid.svg.png"
+                  alt="ended"
+                ></img>
+                <span className={styles["ended"]}>Circle ended</span>
+              </>
+            ) : isLive ? (
               <>
                 <img
                   src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Red_Circle_full.png"
@@ -348,29 +394,35 @@ const Circle = () => {
               <b>Scheduled for:</b> {circle.start_date}
             </p>
           )}
-          <p>
-            <b>Capacity:</b> {circle.participants_limit}
-          </p>
-          <p>
-            <b>Interested:</b> {registeredUsers.length}
-          </p>
+          {!isEnded && (
+            <>
+              <p>
+                <b>Capacity:</b> {circle.participants_limit}
+              </p>
+              <p>
+                <b>Interested:</b> {registeredUsers.length}
+              </p>
+            </>
+          )}
           <p>
             <b>Description: </b>
             {circle.description}
           </p>
         </div>
         <div className={styles["circle-footer"]}>
-          {!isLoading && circle["host_id"] === appContext.loggedInUser.id && (
-            <StreamVideo client={appContext.streamClient}>
-              <StreamCall call={call}>
-                <CallLayout
-                  isHost={true}
-                  setIsLive={setIsLive}
-                  loadRoom={loadRoom}
-                />
-              </StreamCall>
-            </StreamVideo>
-          )}
+          {!isLoading &&
+            !isEnded &&
+            circle["host_id"] === appContext.loggedInUser.id && (
+              <StreamVideo client={appContext.streamClient}>
+                <StreamCall call={call}>
+                  <CallLayout
+                    isHost={true}
+                    setIsLive={setIsLive}
+                    loadRoom={loadRoom}
+                  />
+                </StreamCall>
+              </StreamVideo>
+            )}
           {!isLoading &&
             circle["host_id"] !== appContext.loggedInUser.id &&
             isLive && (
@@ -382,46 +434,46 @@ const Circle = () => {
             )}
           {!isLoading &&
             circle["host_id"] !== appContext.loggedInUser.id &&
-            !isLive && <p>Thanks for your patience. Circle is not live yet.</p>}
+            !isLive &&
+            !isEnded && (
+              <p>Thanks for your patience. Circle is not live yet.</p>
+            )}
+          {isEnded && <p>This Circle has been archived.</p>}
         </div>
       </div>
       <div className={styles["circle-actions"]}>
-        {circle["host_id"] !== appContext.loggedInUser.id && (
+        {circle["host_id"] !== appContext.loggedInUser.id && !isEnded && (
           <FaFlag
             className={isFlagged ? styles["flag-active"] : styles["flag"]}
             onClick={handleFlag}
           ></FaFlag>
         )}
-        {circle["host_id"] !== appContext.loggedInUser.id && !isLive ? (
-          <>
-            <Button
-              type="button"
-              className={isRegistered ? "register-btn-active" : "register-btn"}
-              onClick={handleRegister}
+        {circle["host_id"] !== appContext.loggedInUser.id &&
+          !isEnded &&
+          !isLive && (
+            <>
+              <Button
+                type="button"
+                className={
+                  isRegistered ? "register-btn-active" : "register-btn"
+                }
+                onClick={handleRegister}
+              >
+                {isRegistered ? "I'm going!" : "I'm interested!"}
+              </Button>
+            </>
+          )}
+        {circle["host_id"] === appContext.loggedInUser.id &&
+          !isLive &&
+          !isEnded && (
+            <Link
+              to={`/circle/${circleId}/manage`}
+              state={{ circle, existingTags: tags }}
+              className={styles["manage-link"]}
             >
-              {isRegistered ? "I'm going!" : "I'm interested!"}
-            </Button>
-          </>
-        ) : (
-          isRegistered && (
-            <Button
-              type="button"
-              className="join-btn"
-              onClick={handleJoinCircle}
-            >
-              Join now
-            </Button>
-          )
-        )}
-        {circle["host_id"] === appContext.loggedInUser.id && !isLive && (
-          <Link
-            to={`/circle/${circleId}/manage`}
-            state={{ circle, existingTags: tags }}
-            className={styles["manage-link"]}
-          >
-            Manage
-          </Link>
-        )}
+              Manage
+            </Link>
+          )}
       </div>
     </div>
   );

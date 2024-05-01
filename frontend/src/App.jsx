@@ -91,13 +91,6 @@ const App = () => {
             logout,
           }}
         >
-          {/* To check credentials (for development only) */}
-          <div className="credentials">
-            <p>Access token: {accessToken}</p>
-            <p>Logged in user: {JSON.stringify(loggedInUser)}</p>
-            <p>Expiration date: {JSON.stringify(expirationDate)}</p>
-            <p>Refresh token: {localStorage.getItem("refreshToken")}</p>
-          </div>
           <div className={styles["layout-wrapper"]}>
             {loggedInUser && <NavBar />}
             <Routes>

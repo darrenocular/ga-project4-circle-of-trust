@@ -49,7 +49,10 @@ const Profile = () => {
 
       if (res.ok) {
         setUserHostedCircles(
-          res.data.filter((circle) => new Date(circle.start_date) <= Date.now())
+          res.data.filter(
+            (circle) =>
+              circle.is_ended || new Date(circle.start_date) <= Date.now()
+          )
         );
         setUserScheduledCircles(
           res.data.filter((circle) => new Date(circle.start_date) > Date.now())
@@ -218,11 +221,11 @@ const Profile = () => {
         </div>
       </div>
       <div className={styles["profile-section"]}>
-        <p className={styles["section-header"]}>Hosted</p>
+        <p className={styles["section-header"]}>Archives</p>
         <div className={styles["section-body"]}>
           {userHostedCircles.length > 0 ? (
             userHostedCircles.map((circle, idx) => (
-              <CircleCard circle={circle} key={idx} />
+              <CircleCard circle={circle} isEnded={circle.is_ended} key={idx} />
             ))
           ) : (
             <p className={styles["notification-bar"]}>No hosted Circles yet.</p>

@@ -1,0 +1,19 @@
+.end-call-btn {
+  padding: 8px 1rem;
+  border-radius: 4px;
+  font-family: "Inter", sans-serif;
+  width: 96px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid red;
+  color: red;
+  margin: 8px 0;
+  background-color: white;
+}
+
+.end-call-btn:hover {
+  background-color: red;
+  color: white;
+  transition: all 0.4s ease;
+  cursor: pointer;
+}

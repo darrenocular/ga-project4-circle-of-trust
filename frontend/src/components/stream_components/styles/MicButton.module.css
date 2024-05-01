@@ -2,7 +2,7 @@
 .mute-btn-active {
   padding: 8px 1rem;
   border-radius: 4px;
-  background-color: #facf39;
+  background-color: white;
   font-family: "Inter", sans-serif;
   width: 96px;
   font-size: 1rem;
@@ -14,11 +14,11 @@
 
 .mute-btn-active,
 .mute-btn:hover {
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .mute-btn-active:hover {
-  background-color: #facf39;
+  background-color: white;
 }
 
 .mute-btn:hover,

@@ -74,7 +74,6 @@ const Host = () => {
               startsAt: res.data.start_date,
             },
           });
-          console.log("call created");
           return res.data.id;
         } else {
           throw new Error(

@@ -28,7 +28,7 @@ const Home = () => {
       );
 
       if (res.ok) {
-        setRegisteredCircles(res.data);
+        setRegisteredCircles(res.data.filter((circle) => !circle.is_ended));
       } else {
         throw new Error(
           typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -50,7 +50,10 @@ const Home = () => {
 
       if (res.ok) {
         setFollowingCircles(
-          res.data.filter((circle) => new Date(circle.start_date) > Date.now())
+          res.data.filter(
+            (circle) =>
+              !circle.is_ended && new Date(circle.start_date) > Date.now()
+          )
         );
       } else {
         throw new Error(

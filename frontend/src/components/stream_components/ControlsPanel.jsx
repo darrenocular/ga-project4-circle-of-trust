@@ -1,16 +1,22 @@
 import { MicButton } from "./MicButton";
 import { LiveButton } from "./LiveButton";
 import { JoinButton } from "./JoinButton";
+import { EndCallButton } from "./EndCallButton";
 import { RequestButton } from "./RequestButton";
 import { useState, useEffect } from "react";
 import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import styles from "./styles/ControlsPanel.module.css";
 
-export const HostControlsPanel = ({ setIsLive, loadRoom }) => {
+export const HostControlsPanel = ({ setIsEnded, setIsLive, loadRoom }) => {
   return (
     <div className={styles["controls-panel"]}>
       <MicButton />
       <LiveButton setIsLive={setIsLive} loadRoom={loadRoom} />
+      <EndCallButton
+        setIsEnded={setIsEnded}
+        setIsLive={setIsLive}
+        loadRoom={loadRoom}
+      />
     </div>
   );
 };

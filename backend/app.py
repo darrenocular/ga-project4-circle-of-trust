@@ -32,7 +32,6 @@ app.register_blueprint(follow_rs_bp)
 app.register_blueprint(circles_bp)
 app.register_blueprint(threads_bp)
 app.register_blueprint(comments_bp)
-# app.register_blueprint(stream_bp)
 
 PORT = os.getenv('PORT') or 5000
 

@@ -1,6 +1,6 @@
 .profile-page {
   width: 80%;
-  height: 90vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,10 +27,12 @@
   min-width: 48rem;
   max-width: 48rem;
   justify-content: center;
+  align-items: center;
 }
 
 .host-img {
   width: 14rem;
+  height: 14rem;
   border-radius: 50%;
   margin-right: 4rem;
 }

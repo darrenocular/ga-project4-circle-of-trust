@@ -25,12 +25,17 @@ const Explore = () => {
         setUpcomingCircles(
           res.data.filter(
             (circle) =>
-              circle["is_live"] === false &&
+              !circle.is_ended &&
+              !circle.is_live &&
               new Date(circle["start_date"]) >= Date.now()
           )
         );
-        setLiveCircles(res.data.filter((circle) => circle["is_live"] === true));
-        setPopularCircles(res.data.slice(0, 5));
+        setLiveCircles(
+          res.data.filter((circle) => !circle.is_ended && circle.is_live)
+        );
+        setPopularCircles(
+          res.data.filter((circle) => !circle.is_ended).slice(0, 5)
+        );
       } else {
         throw new Error(
           typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
