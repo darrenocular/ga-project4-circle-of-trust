@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./styles/EndCallButton.module.css";
 import AppContext from "../../context/AppContext";
 
-export const EndCallButton = ({ isEnded, setIsLive, setIsEnded }) => {
+export const EndCallButton = ({ setIsLive, setIsEnded }) => {
   const call = useCall();
   const navigate = useNavigate();
   const appContext = useContext(AppContext);
@@ -14,6 +14,7 @@ export const EndCallButton = ({ isEnded, setIsLive, setIsEnded }) => {
       await call?.endCall();
       setIsLive(false);
       setIsEnded(true);
+      await loadRoom();
       navigate(`/profile/${appContext.loggedInUser.id}`);
     } catch (error) {
       console.error(error.message);

@@ -275,6 +275,7 @@ const Circle = () => {
     getTags();
     getRegisteredUsers();
     getFlagsByCircle();
+    loadRoom();
   }, []);
 
   // Set isLive and isEnded when circle data is fetched
@@ -418,6 +419,7 @@ const Circle = () => {
                   <CallLayout
                     isHost={true}
                     setIsLive={setIsLive}
+                    setIsEnded={setIsEnded}
                     loadRoom={loadRoom}
                   />
                 </StreamCall>
