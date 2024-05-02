@@ -4,6 +4,7 @@ import styles from "./App.module.css";
 import AppContext from "./context/AppContext";
 import LoadingSpinner from "./components/utils/LoadingSpinner";
 import NavBar from "./components/NavBar";
+import NotificationBubble from "./components/NotificationBubble";
 import ProtectedRoute from "./components/utils/ProtectedRoute";
 import { StreamVideoClient } from "@stream-io/video-react-sdk";
 
@@ -23,6 +24,8 @@ const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [expirationDate, setExpirationDate] = useState(null);
   const [streamClient, setStreamClient] = useState(undefined);
+  const [isNotification, setIsNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
   const navigate = useNavigate();
 
   const logout = () => {
@@ -75,6 +78,18 @@ const App = () => {
     };
   }, [loggedInUser]);
 
+  // Listens for notifications
+  useEffect(() => {
+    if (isNotification) {
+      const timeout = setTimeout(() => {
+        setIsNotification(false);
+        setNotificationMessage("");
+      }, 5000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isNotification]);
+
   return (
     <>
       <Suspense fallback={<LoadingSpinner />}>
@@ -88,10 +103,17 @@ const App = () => {
             setExpirationDate,
             streamClient,
             setStreamClient,
+            isNotification,
+            setIsNotification,
+            notificationMessage,
+            setNotificationMessage,
             logout,
           }}
         >
           <div className={styles["layout-wrapper"]}>
+            {isNotification && (
+              <NotificationBubble message={notificationMessage} />
+            )}
             {loggedInUser && <NavBar />}
             <Routes>
               <Route

@@ -1,9 +1,11 @@
 import { useCall } from "@stream-io/video-react-sdk";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 import styles from "./styles/PermissionRequestsPanel.module.css";
 import Button from "../utils/Button";
+import AppContext from "../../context/AppContext";
 
 export const PermissionRequestsPanel = () => {
+  const appContext = useContext(AppContext);
   // this hook will take the call instance from the <StreamCall /> context.
   const call = useCall();
   const [permissionRequests, setPermissionRequests] = useState([]);
@@ -21,8 +23,12 @@ export const PermissionRequestsPanel = () => {
       try {
         if (accept) {
           await call?.grantPermissions(user.id, permissions);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage("Speaker permission granted.");
         } else {
           await call?.revokePermissions(user.id, permissions);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage("Speaker permission denied.");
         }
         setPermissionRequests((reqs) => reqs.filter((req) => req !== request));
       } catch (err) {

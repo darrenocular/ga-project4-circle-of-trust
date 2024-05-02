@@ -74,6 +74,10 @@ const Host = () => {
               startsAt: res.data.start_date,
             },
           });
+
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage("Circle scheduled successfully.");
+
           return res.data.id;
         } else {
           throw new Error(

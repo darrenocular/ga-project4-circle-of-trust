@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
+import AppContext from "../context/AppContext";
 import styles from "./styles/Login.module.css";
 import FormInput from "../components/utils/FormInput";
 import Button from "../components/utils/Button";
@@ -16,6 +17,7 @@ const Register = () => {
   const [dp, setDp] = useState("");
   const fetchData = useFetch();
   const navigate = useNavigate();
+  const appContext = useContext(AppContext);
 
   const handleInputChange = (e) => {
     switch (e.target.name) {
@@ -70,6 +72,8 @@ const Register = () => {
 
         if (res.ok) {
           handleClearForm(e);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage("User created successfully.");
           navigate("/login");
         } else {
           throw new Error(

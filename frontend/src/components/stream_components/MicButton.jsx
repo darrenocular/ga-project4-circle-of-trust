@@ -1,7 +1,10 @@
-import { useCall, useCallStateHooks } from "@stream-io/video-react-sdk";
+import { useContext } from "react";
+import { useCallStateHooks } from "@stream-io/video-react-sdk";
 import styles from "./styles/MicButton.module.css";
+import AppContext from "../../context/AppContext";
 
 export const MicButton = () => {
+  const appContext = useContext(AppContext);
   const { useMicrophoneState } = useCallStateHooks();
   const { microphone, isMute } = useMicrophoneState();
   return (
@@ -11,8 +14,12 @@ export const MicButton = () => {
         onClick={async () => {
           if (isMute) {
             await microphone.enable();
+            appContext.setIsNotification(true);
+            appContext.setNotificationMessage("Your sound is on.");
           } else {
             await microphone.disable();
+            appContext.setIsNotification(true);
+            appContext.setNotificationMessage("You are on mute.");
           }
         }}
       >

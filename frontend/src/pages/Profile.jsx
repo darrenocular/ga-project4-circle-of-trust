@@ -128,6 +128,10 @@ const Profile = () => {
 
         if (res.ok) {
           setIsFollowed(true);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage(
+            `You have followed ${user.username}.`
+          );
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -146,6 +150,10 @@ const Profile = () => {
 
         if (res.ok) {
           setIsFollowed(false);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage(
+            `You have unfollowed ${user.username}.`
+          );
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg

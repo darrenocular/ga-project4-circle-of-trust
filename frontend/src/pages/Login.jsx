@@ -8,6 +8,7 @@ import FormInput from "../components/utils/FormInput";
 import Button from "../components/utils/Button";
 import GraphicLogo from "../assets/logo/logo-graphic-color.svg";
 import WordLogo from "../assets/logo/logo-word-color.svg";
+import NotificationBubble from "../components/NotificationBubble";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -46,6 +47,8 @@ const Login = () => {
             username: decoded.username,
           });
           localStorage.setItem("refreshToken", res.data["refresh_token"]);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage("Logged in successfully.");
         } else {
           throw new Error(res.msg);
         }

@@ -55,6 +55,8 @@ const ManageCircle = () => {
       );
 
       if (res.ok) {
+        appContext.setIsNotification(true);
+        appContext.setNotificationMessage("Circle has been deleted.");
         navigate(`/profile/${appContext.loggedInUser.id}`);
       } else {
         throw new Error(
@@ -176,6 +178,8 @@ const ManageCircle = () => {
     e.preventDefault();
     await handleUpdateCircle();
     await handleUpdateTags();
+    appContext.setIsNotification(true);
+    appContext.setNotificationMessage("Circle updated successfully.");
     navigate(`/circle/${circle.id}`);
   };
 

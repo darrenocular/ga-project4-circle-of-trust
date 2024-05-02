@@ -22,6 +22,8 @@ const FlagItem = ({ flag, getAllFlags }) => {
       );
 
       if (res.ok) {
+        appContext.setIsNotification(true);
+        appContext.setNotificationMessage("Circle marked safe.");
         getAllFlags();
       } else {
         throw new Error(
@@ -46,6 +48,8 @@ const FlagItem = ({ flag, getAllFlags }) => {
       );
 
       if (res.ok) {
+        appContext.setIsNotification(true);
+        appContext.setNotificationMessage("Circle has been deleted.");
         getAllFlags();
       } else {
         throw new Error(

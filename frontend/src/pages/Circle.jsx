@@ -109,6 +109,10 @@ const Circle = () => {
         if (res.ok) {
           setIsRegistered(true);
           getRegisteredUsers();
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage(
+            "Your interest has been registered."
+          );
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -127,6 +131,8 @@ const Circle = () => {
         if (res.ok) {
           setIsRegistered(false);
           getRegisteredUsers();
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage("Your interest has been removed.");
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -175,6 +181,10 @@ const Circle = () => {
 
         if (res.ok) {
           setIsFlagged(true);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage(
+            "Circle has been reported. This will be reviewed the platform administrator."
+          );
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -192,6 +202,10 @@ const Circle = () => {
 
         if (res.ok) {
           setIsFlagged(false);
+          appContext.setIsNotification(true);
+          appContext.setNotificationMessage(
+            "You have removed this flag. The system administrator will be notified."
+          );
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
