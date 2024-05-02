@@ -61,6 +61,7 @@ export const RequestButton = ({ isInCall, loadRoom }) => {
           console.log("disable microphone failed", err);
         });
       }
+      setIsAwaitingAudioApproval(false);
     });
   }, [call, connectedUser]);
 

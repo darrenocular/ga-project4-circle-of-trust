@@ -108,6 +108,7 @@ const Circle = () => {
 
         if (res.ok) {
           setIsRegistered(true);
+          getRegisteredUsers();
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
@@ -125,6 +126,7 @@ const Circle = () => {
 
         if (res.ok) {
           setIsRegistered(false);
+          getRegisteredUsers();
         } else {
           throw new Error(
             typeof res.msg === "object" ? JSON.stringify(res.msg) : res.msg
