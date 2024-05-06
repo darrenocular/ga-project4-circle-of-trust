@@ -1,4 +1,4 @@
-# Project 4 - Circle of Trust
+# Circle of Trust
 
 ![logo-full-color](https://github.com/darrenocular/project4/assets/43130901/2b55802a-4937-4a53-90a9-e6f94867f188)
 
